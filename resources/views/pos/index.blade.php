@@ -224,7 +224,7 @@
                         <div class="px-4 sm:px-6 flex-1 flex flex-col min-h-0">
                             
                             <!-- Cart Items -->
-                            <div class="flex-1 overflow-y-auto no-scrollbar -mr-2 pr-2 mb-4 min-h-0 max-h-[calc(4*105px)]">
+                            <div class="flex-1 overflow-y-auto no-scrollbar -mr-2 pr-2 pb-4 min-h-0 max-h-[calc(5*105px)]">
                                 <template x-if="cart.length === 0">
                                     <div class="h-full flex flex-col items-center justify-center text-muted opacity-60 py-8">
                                         <div class="w-20 h-20 rounded-full bg-muted/10 flex items-center justify-center mb-4">
@@ -235,7 +235,7 @@
                                     </div>
                                 </template>
                                 <template x-for="(item, index) in cart" :key="item.id">
-                                    <div class="flex justify-between items-center mb-3 bg-background p-3 sm:p-4 rounded-xl border border-border group hover:border-gray-400 dark:hover:border-gray-600 transition-colors" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100">
+                                    <div :class="index === cart.length - 1 ? '' : 'mb-3'" class="flex justify-between items-center bg-background p-3 sm:p-4 rounded-xl border border-border group hover:border-gray-400 dark:hover:border-gray-600 transition-colors" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100">
                                         <div class="flex-1 min-w-0 mr-3">
                                             <h4 class="font-semibold text-foreground text-sm line-clamp-1 mb-0.5" x-text="item.name"></h4>
                                             <p class="text-xs text-muted" x-text="formatPrice(item.price) + ' × ' + item.quantity"></p>

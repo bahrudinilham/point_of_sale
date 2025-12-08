@@ -4,7 +4,8 @@ Sistem Point of Sale (POS) modern untuk konter HP, dibangun dengan Laravel 12 da
 
 ![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat-square&logo=laravel)
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat-square&logo=php)
-![TailwindCSS](https://img.shields.io/badge/Tailwind-3.x-38B2AC?style=flat-square&logo=tailwind-css)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-4.x-38B2AC?style=flat-square&logo=tailwind-css)
+![Alpine.js](https://img.shields.io/badge/Alpine.js-3.x-8BC0D0?style=flat-square&logo=alpine.js)
 
 ## ✨ Fitur
 
@@ -26,7 +27,7 @@ Sistem Point of Sale (POS) modern untuk konter HP, dibangun dengan Laravel 12 da
 
 ```bash
 git clone <repository-url>
-cd kasir-pos
+cd point_of_sale
 composer install
 npm install
 ```
@@ -96,6 +97,7 @@ archived_transactions ──< archived_transaction_items        ─┘
 -   `transactions` - Transaksi penjualan
 -   `transaction_items` - Detail item transaksi
 -   `archived_transactions` - Arsip transaksi lama
+-   `archived_transaction_items` - Detail item transaksi arsip
 
 ---
 
