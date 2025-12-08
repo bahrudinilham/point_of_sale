@@ -115,23 +115,65 @@
                     <!-- Cashier -->
                     <div class="flex-1">
                         <label class="block text-xs font-medium text-muted mb-1">Kasir</label>
-                        <select name="user_id" onchange="this.form.submit()" class="w-full bg-background border-border text-foreground text-sm rounded-lg p-2.5 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]">
-                            <option value="all">Semua Kasir</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ request('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="relative" x-data="{ 
+                            open: false, 
+                            selected: '{{ request('user_id') ?? 'all' }}', 
+                            label: '{{ $users->find(request('user_id'))?->name ?? 'Semua Kasir' }}' 
+                        }">
+                            <input type="hidden" name="user_id" x-model="selected">
+                            <button @click="open = !open" @click.away="open = false" type="button" 
+                                    class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 flex items-center justify-between focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF] transition-colors">
+                                <span x-text="label" class="truncate"></span>
+                                <svg class="w-4 h-4 text-muted transition-transform duration-200 shrink-0" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div x-show="open" x-transition.origin.top style="display: none;" 
+                                 class="absolute z-50 mt-1 w-full bg-card border border-border rounded-lg shadow-lg overflow-hidden max-h-60 overflow-y-auto">
+                                <button type="button" class="w-full text-left px-3 py-2.5 text-sm hover:bg-muted/20 transition-colors"
+                                        :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': selected == 'all', 'text-foreground': selected != 'all'}"
+                                        @click="selected = 'all'; label = 'Semua Kasir'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                    Semua Kasir
+                                </button>
+                                @foreach($users as $user)
+                                    <button type="button" class="w-full text-left px-3 py-2.5 text-sm hover:bg-muted/20 transition-colors"
+                                            :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': selected == '{{ $user->id }}', 'text-foreground': selected != '{{ $user->id }}'}"
+                                            @click="selected = '{{ $user->id }}'; label = '{{ $user->name }}'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                        {{ $user->name }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Payment Method -->
                     <div class="flex-1">
                         <label class="block text-xs font-medium text-muted mb-1">Metode Pembayaran</label>
-                        <select name="payment_method" onchange="this.form.submit()" class="w-full bg-background border-border text-foreground text-sm rounded-lg p-2.5 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]">
-                            <option value="all">Semua Metode</option>
-                            @foreach($paymentMethods as $method)
-                                <option value="{{ $method->slug }}" {{ request('payment_method') == $method->slug ? 'selected' : '' }}>{{ $method->name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="relative" x-data="{ 
+                            open: false, 
+                            selected: '{{ request('payment_method') ?? 'all' }}', 
+                            label: '{{ collect($paymentMethods)->firstWhere('slug', request('payment_method'))?->name ?? 'Semua Metode' }}' 
+                        }">
+                            <input type="hidden" name="payment_method" x-model="selected">
+                            <button @click="open = !open" @click.away="open = false" type="button" 
+                                    class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 flex items-center justify-between focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF] transition-colors">
+                                <span x-text="label" class="truncate"></span>
+                                <svg class="w-4 h-4 text-muted transition-transform duration-200 shrink-0" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div x-show="open" x-transition.origin.top style="display: none;" 
+                                 class="absolute z-50 mt-1 w-full bg-card border border-border rounded-lg shadow-lg overflow-hidden max-h-60 overflow-y-auto">
+                                <button type="button" class="w-full text-left px-3 py-2.5 text-sm hover:bg-muted/20 transition-colors"
+                                        :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': selected == 'all', 'text-foreground': selected != 'all'}"
+                                        @click="selected = 'all'; label = 'Semua Metode'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                    Semua Metode
+                                </button>
+                                @foreach($paymentMethods as $method)
+                                    <button type="button" class="w-full text-left px-3 py-2.5 text-sm hover:bg-muted/20 transition-colors"
+                                            :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': selected == '{{ $method->slug }}', 'text-foreground': selected != '{{ $method->slug }}'}"
+                                            @click="selected = '{{ $method->slug }}'; label = '{{ $method->name }}'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                        {{ $method->name }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Actions -->
