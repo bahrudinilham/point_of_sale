@@ -46,7 +46,7 @@
 
     <!-- Search & Filters -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
-        <div class="bg-card rounded-xl border border-border overflow-hidden">
+        <div class="bg-card rounded-xl border border-border">
             <form method="GET" action="{{ route('products.index') }}">
                 <!-- Search Row -->
                 <div class="p-4 border-b border-border">
@@ -82,18 +82,32 @@
                         <!-- Filter Controls -->
                         <div class="flex flex-wrap items-center gap-2 flex-1">
                             <!-- Category Filter -->
-                            <div class="relative">
-                                <select name="category_id" onchange="this.form.submit()" 
-                                        class="appearance-none bg-background border border-border text-foreground rounded-full text-xs font-medium py-2 pl-3 pr-8 focus:border-[#5D5FEF] focus:ring-[#5D5FEF] cursor-pointer hover:border-[#5D5FEF]/50 transition-colors {{ request('category_id') ? 'border-[#5D5FEF] bg-[#5D5FEF]/5' : '' }}">
-                                    <option value="">Semua Kategori</option>
+                            <div class="relative" x-data="{ 
+                                open: false, 
+                                selected: '{{ request('category_id') }}', 
+                                label: '{{ $categories->firstWhere('id', request('category_id'))?->name ?? 'Semua Kategori' }}' 
+                            }">
+                                <input type="hidden" name="category_id" x-model="selected">
+                                <button @click="open = !open" @click.away="open = false" type="button" 
+                                        class="bg-background border border-border text-foreground rounded-full text-xs font-medium py-2 pl-3 pr-2.5 flex items-center gap-1 focus:border-[#5D5FEF] focus:ring-[#5D5FEF] hover:border-[#5D5FEF]/50 transition-colors min-w-[140px] justify-between"
+                                        :class="{'border-[#5D5FEF] bg-[#5D5FEF]/5': selected}">
+                                    <span x-text="label" class="truncate"></span>
+                                    <svg class="w-3.5 h-3.5 text-muted transition-transform duration-200 shrink-0" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div x-show="open" x-transition.origin.top.left style="display: none;" 
+                                     class="absolute z-50 mt-1 w-full bg-card border border-border rounded-xl shadow-lg overflow-hidden py-1 min-w-[160px]">
+                                    <button type="button" class="w-full text-left px-3 py-2 text-xs hover:bg-muted/20 transition-colors"
+                                            :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': !selected, 'text-foreground': selected}"
+                                            @click="selected = ''; label = 'Semua Kategori'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                        Semua Kategori
+                                    </button>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        <button type="button" class="w-full text-left px-3 py-2 text-xs hover:bg-muted/20 transition-colors"
+                                                :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': selected == '{{ $category->id }}', 'text-foreground': selected != '{{ $category->id }}'}"
+                                                @click="selected = '{{ $category->id }}'; label = '{{ $category->name }}'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                            {{ $category->name }}
+                                        </button>
                                     @endforeach
-                                </select>
-                                <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
-                                    <svg class="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
                                 </div>
                             </div>
 
@@ -101,32 +115,50 @@
                             <div class="hidden sm:block w-px h-5 bg-border"></div>
 
                             <!-- Sort Filter -->
-                            <div class="relative">
-                                <select name="sort" onchange="this.form.submit()" 
-                                        class="appearance-none bg-background border border-border text-foreground rounded-full text-xs font-medium py-2 pl-3 pr-8 focus:border-[#5D5FEF] focus:ring-[#5D5FEF] cursor-pointer hover:border-[#5D5FEF]/50 transition-colors {{ request('sort') ? 'border-[#5D5FEF] bg-[#5D5FEF]/5' : '' }}">
-                                    <option value="">Urutkan</option>
-                                    <option value="name_asc" {{ request('sort') == 'name_asc' ? 'selected' : '' }}>Nama A-Z</option>
-                                    <option value="name_desc" {{ request('sort') == 'name_desc' ? 'selected' : '' }}>Nama Z-A</option>
-                                    <option value="stock_desc" {{ request('sort') == 'stock_desc' ? 'selected' : '' }}>Stok Tertinggi</option>
-                                    <option value="stock_asc" {{ request('sort') == 'stock_asc' ? 'selected' : '' }}>Stok Terendah</option>
-                                </select>
-                                <div class="absolute inset-y-0 right-0 pr-2 flex items-center pointer-events-none">
-                                    <svg class="w-3.5 h-3.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
+                            <div class="relative" x-data="{ 
+                                open: false, 
+                                selected: '{{ request('sort') }}', 
+                                label: '{{ match(request('sort')) { 'name_asc' => 'Nama A-Z', 'name_desc' => 'Nama Z-A', 'stock_desc' => 'Stok Tertinggi', 'stock_asc' => 'Stok Terendah', default => 'Urutkan' } }}' 
+                            }">
+                                <input type="hidden" name="sort" x-model="selected">
+                                <button @click="open = !open" @click.away="open = false" type="button" 
+                                        class="bg-background border border-border text-foreground rounded-full text-xs font-medium py-2 pl-3 pr-2.5 flex items-center gap-1 focus:border-[#5D5FEF] focus:ring-[#5D5FEF] hover:border-[#5D5FEF]/50 transition-colors min-w-[120px] justify-between"
+                                        :class="{'border-[#5D5FEF] bg-[#5D5FEF]/5': selected}">
+                                    <span x-text="label" class="truncate"></span>
+                                    <svg class="w-3.5 h-3.5 text-muted transition-transform duration-200 shrink-0" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div x-show="open" x-transition.origin.top.left style="display: none;" 
+                                     class="absolute z-50 mt-1 w-full bg-card border border-border rounded-xl shadow-lg overflow-hidden py-1 min-w-[140px]">
+                                    <button type="button" class="w-full text-left px-3 py-2 text-xs hover:bg-muted/20 transition-colors"
+                                            :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': !selected, 'text-foreground': selected}"
+                                            @click="selected = ''; label = 'Urutkan'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                        Urutkan
+                                    </button>
+                                    @foreach([
+                                        'name_asc' => 'Nama A-Z',
+                                        'name_desc' => 'Nama Z-A',
+                                        'stock_desc' => 'Stok Tertinggi',
+                                        'stock_asc' => 'Stok Terendah'
+                                    ] as $value => $label)
+                                        <button type="button" class="w-full text-left px-3 py-2 text-xs hover:bg-muted/20 transition-colors"
+                                                :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': selected == '{{ $value }}', 'text-foreground': selected != '{{ $value }}'}"
+                                                @click="selected = '{{ $value }}'; label = '{{ $label }}'; open = false; $nextTick(() => $el.closest('form').submit())">
+                                            {{ $label }}
+                                        </button>
+                                    @endforeach
                                 </div>
                             </div>
                             
                             <!-- Spacer -->
-                            <div class="flex-1"></div>
+                            <div class="hidden sm:block flex-1"></div>
 
                             <!-- Reset All -->
                             @if(request('search') || request('category_id') || request('sort'))
-                                <a href="{{ route('products.index') }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-rose-500 hover:text-rose-600 py-2 px-3 rounded-full bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-100 dark:hover:bg-rose-900/30 transition-colors">
+                                <a href="{{ route('products.index') }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-rose-500 hover:text-rose-600 py-2 px-2 sm:px-3 rounded-full bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-100 dark:hover:bg-rose-900/30 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                     </svg>
-                                    Reset Filter
+                                    Reset <span class="hidden sm:inline">Filter</span>
                                 </a>
                             @endif
                         </div>
@@ -134,66 +166,7 @@
                 </div>
 
                 <!-- Active Filters Display -->
-                @if(request('search') || request('category_id') || request('sort'))
-                    <div class="px-4 py-2.5 bg-[#5D5FEF]/5 border-t border-[#5D5FEF]/10">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="text-xs text-muted">Aktif:</span>
-                            
-                            @if(request('search'))
-                                <span class="inline-flex items-center gap-1.5 text-xs bg-background border border-border rounded-full py-1 pl-2.5 pr-1.5">
-                                    <svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                    </svg>
-                                    <span class="text-foreground">"{{ Str::limit(request('search'), 15) }}"</span>
-                                    <a href="{{ route('products.index', request()->except('search')) }}" class="p-0.5 rounded-full hover:bg-muted/50 text-muted hover:text-foreground">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                    </a>
-                                </span>
-                            @endif
-                            
-                            @if(request('category_id'))
-                                @php $selectedCategory = $categories->find(request('category_id')); @endphp
-                                @if($selectedCategory)
-                                    <span class="inline-flex items-center gap-1.5 text-xs bg-background border border-border rounded-full py-1 pl-2.5 pr-1.5">
-                                        <svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                        </svg>
-                                        <span class="text-foreground">{{ $selectedCategory->name }}</span>
-                                        <a href="{{ route('products.index', request()->except('category_id')) }}" class="p-0.5 rounded-full hover:bg-muted/50 text-muted hover:text-foreground">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                            </svg>
-                                        </a>
-                                    </span>
-                                @endif
-                            @endif
-                            
-                            @if(request('sort'))
-                                @php
-                                    $sortLabels = [
-                                        'name_asc' => 'Nama A-Z',
-                                        'name_desc' => 'Nama Z-A',
-                                        'stock_desc' => 'Stok Tertinggi',
-                                        'stock_asc' => 'Stok Terendah',
-                                    ];
-                                @endphp
-                                <span class="inline-flex items-center gap-1.5 text-xs bg-background border border-border rounded-full py-1 pl-2.5 pr-1.5">
-                                    <svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/>
-                                    </svg>
-                                    <span class="text-foreground">{{ $sortLabels[request('sort')] ?? request('sort') }}</span>
-                                    <a href="{{ route('products.index', request()->except('sort')) }}" class="p-0.5 rounded-full hover:bg-muted/50 text-muted hover:text-foreground">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                    </a>
-                                </span>
-                            @endif
-                        </div>
-                    </div>
-                @endif
+
             </form>
         </div>
     </div>

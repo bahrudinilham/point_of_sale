@@ -89,14 +89,29 @@
                 </div>
                 <form action="{{ route('archive.run') }}" method="POST" class="flex items-center gap-3" data-confirm-archive>
                     @csrf
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2" x-data="{ open: false, selected: '6', label: '6 bulan' }">
                         <label class="text-sm text-muted whitespace-nowrap">Lebih dari</label>
-                        <select name="months" class="bg-background border border-border text-foreground text-sm rounded-lg p-2.5 pr-8 min-w-[100px] appearance-none bg-no-repeat bg-[length:16px] bg-[right_8px_center] focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke=%22%236b7280%22><path stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%222%22 d=%22M19 9l-7 7-7-7%22/></svg>');">
-                            <option value="3">3 bulan</option>
-                            <option value="6" selected>6 bulan</option>
-                            <option value="12">1 tahun</option>
-                            <option value="24">2 tahun</option>
-                        </select>
+                        <div class="relative">
+                            <input type="hidden" name="months" x-model="selected">
+                            <button @click="open = !open" @click.away="open = false" type="button" class="bg-background border border-border text-foreground text-sm rounded-lg p-2.5 min-w-[120px] flex justify-between items-center focus:ring-2 focus:ring-[#5D5FEF] focus:border-[#5D5FEF] transition-all">
+                                <span x-text="label"></span>
+                                <svg class="w-4 h-4 text-muted transition-transform duration-200" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div x-show="open" x-transition.origin.top.left class="absolute z-50 mt-1 w-full bg-card border border-border rounded-lg shadow-lg overflow-hidden py-1">
+                                <template x-for="option in [
+                                    {val: '3', text: '3 bulan'},
+                                    {val: '6', text: '6 bulan'},
+                                    {val: '12', text: '1 tahun'},
+                                    {val: '24', text: '2 tahun'}
+                                ]">
+                                    <button type="button" class="w-full text-left px-3 py-2 text-sm hover:bg-muted/20 transition-colors" 
+                                            :class="{'text-[#5D5FEF] font-medium bg-[#5D5FEF]/5': selected == option.val, 'text-foreground': selected != option.val}"
+                                            @click="selected = option.val; label = option.text; open = false">
+                                        <span x-text="option.text"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" class="bg-[#5D5FEF] hover:bg-[#4b4ddb] text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,15 +140,30 @@
                 </div>
                 <form action="{{ route('archive.purge') }}" method="POST" class="flex items-center gap-3" data-confirm-purge>
                     @csrf
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2" x-data="{ open: false, selected: '12', label: '1 tahun' }">
                         <label class="text-sm text-muted whitespace-nowrap">Lebih dari</label>
-                        <select name="months" class="bg-background border border-border text-foreground text-sm rounded-lg p-2.5 pr-8 min-w-[100px] appearance-none bg-no-repeat bg-[length:16px] bg-[right_8px_center] focus:ring-red-500 focus:border-red-500" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke=%22%236b7280%22><path stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%222%22 d=%22M19 9l-7 7-7-7%22/></svg>');">
-                            <option value="6">6 bulan</option>
-                            <option value="12" selected>1 tahun</option>
-                            <option value="24">2 tahun</option>
-                            <option value="36">3 tahun</option>
-                            <option value="60">5 tahun</option>
-                        </select>
+                        <div class="relative">
+                            <input type="hidden" name="months" x-model="selected">
+                            <button @click="open = !open" @click.away="open = false" type="button" class="bg-background border border-border text-foreground text-sm rounded-lg p-2.5 min-w-[120px] flex justify-between items-center focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all">
+                                <span x-text="label"></span>
+                                <svg class="w-4 h-4 text-muted transition-transform duration-200" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+                            <div x-show="open" x-transition.origin.top.left class="absolute z-50 mt-1 w-full bg-card border border-border rounded-lg shadow-lg overflow-hidden py-1">
+                                <template x-for="option in [
+                                    {val: '6', text: '6 bulan'},
+                                    {val: '12', text: '1 tahun'},
+                                    {val: '24', text: '2 tahun'},
+                                    {val: '36', text: '3 tahun'},
+                                    {val: '60', text: '5 tahun'}
+                                ]">
+                                    <button type="button" class="w-full text-left px-3 py-2 text-sm hover:bg-muted/20 transition-colors" 
+                                            :class="{'text-red-500 font-medium bg-red-500/5': selected == option.val, 'text-foreground': selected != option.val}"
+                                            @click="selected = option.val; label = option.text; open = false">
+                                        <span x-text="option.text"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
