@@ -195,10 +195,10 @@
     </div>
 
     <!-- Archived Transactions Table -->
-    <div class="pb-12">
+    <div class="pb-20 sm:pb-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-card overflow-hidden shadow-xl sm:rounded-xl border border-border">
-                <div class="p-4 sm:p-6">
+            <div id="archive-table" class="bg-card overflow-hidden shadow-xl sm:rounded-xl border border-border">
+                <div class="px-4 pt-4 sm:p-6">
                     @if($archivedTransactions->isEmpty())
                         <div class="text-center py-12">
                             <svg class="w-16 h-16 mx-auto text-muted mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -363,8 +363,8 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div class="mt-6">
-                            {{ $archivedTransactions->links('vendor.pagination.custom') }}
+                        <div class="mt-2 pb-3 sm:mt-6 sm:pb-0">
+                            {{ $archivedTransactions->fragment('archive-table')->links('vendor.pagination.custom') }}
                         </div>
                     @endif
                 </div>

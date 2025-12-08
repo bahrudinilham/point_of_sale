@@ -8,15 +8,15 @@ Sistem Point of Sale (POS) modern untuk konter HP, dibangun dengan Laravel 12 da
 
 ## ✨ Fitur
 
-| Fitur | Deskripsi |
-|-------|-----------|
-| 📊 **Dashboard** | Statistik penjualan, transaksi terbaru, stok rendah |
-| 🛒 **POS** | Interface kasir intuitif dengan pencarian real-time |
-| 📦 **Produk** | CRUD produk dengan kategori dan status aktif/nonaktif |
-| 💳 **Transaksi** | Riwayat lengkap dengan filter tanggal |
-| 📈 **Laporan** | Laporan harian/mingguan/bulanan dengan grafik |
-| 📁 **Arsip** | Arsip transaksi lama dengan restore |
-| ⚙️ **Pengaturan** | Kategori, metode pembayaran, dan pengguna |
+| Fitur             | Deskripsi                                             |
+| ----------------- | ----------------------------------------------------- |
+| 📊 **Dashboard**  | Statistik penjualan, transaksi terbaru, stok rendah   |
+| 🛒 **POS**        | Interface kasir intuitif dengan pencarian real-time   |
+| 📦 **Produk**     | CRUD produk dengan kategori dan status aktif/nonaktif |
+| 💳 **Transaksi**  | Riwayat lengkap dengan filter tanggal                 |
+| 📈 **Laporan**    | Laporan harian/mingguan/bulanan dengan grafik         |
+| 📁 **Arsip**      | Arsip transaksi lama dengan restore                   |
+| ⚙️ **Pengaturan** | Kategori, metode pembayaran, dan pengguna             |
 
 ---
 
@@ -39,6 +39,7 @@ php artisan key:generate
 ```
 
 Edit `.env`:
+
 ```env
 DB_CONNECTION=mysql
 DB_DATABASE=kasir_pos
@@ -65,12 +66,12 @@ Akses di `http://127.0.0.1:8000`
 
 ## 👤 Akun Default
 
-| Role | Email | Password |
-|------|-------|----------|
+| Role  | Email            | Password |
+| ----- | ---------------- | -------- |
 | Admin | admin@konter.com | password |
-| Kasir | budi@konter.com | password |
-| Kasir | siti@konter.com | password |
-| Kasir | andi@konter.com | password |
+| Kasir | budi@konter.com  | password |
+| Kasir | siti@konter.com  | password |
+| Kasir | andi@konter.com  | password |
 
 ---
 
@@ -87,27 +88,28 @@ archived_transactions ──< archived_transaction_items        ─┘
 ```
 
 ### Tabel Utama
-- `users` - Admin & Kasir
-- `categories` - Kategori produk
-- `products` - Produk dengan stok
-- `payment_methods` - Metode pembayaran
-- `transactions` - Transaksi penjualan
-- `transaction_items` - Detail item transaksi
-- `archived_transactions` - Arsip transaksi lama
+
+-   `users` - Admin & Kasir
+-   `categories` - Kategori produk
+-   `products` - Produk dengan stok
+-   `payment_methods` - Metode pembayaran
+-   `transactions` - Transaksi penjualan
+-   `transaction_items` - Detail item transaksi
+-   `archived_transactions` - Arsip transaksi lama
 
 ---
 
 ## 👥 Peran Pengguna
 
-| Fitur | Admin | Kasir |
-|-------|:-----:|:-----:|
-| Dashboard | ✅ | ✅ |
-| POS | ✅ | ✅ |
-| Produk | ✅ | ❌ |
-| Transaksi | ✅ | ❌ |
-| Laporan | ✅ | ❌ |
-| Arsip | ✅ | ❌ |
-| Pengaturan | ✅ | ❌ |
+| Fitur      | Admin | Kasir |
+| ---------- | :---: | :---: |
+| Dashboard  |  ✅   |  ✅   |
+| POS        |  ✅   |  ✅   |
+| Produk     |  ✅   |  ✅   |
+| Transaksi  |  ✅   |  ❌   |
+| Laporan    |  ✅   |  ❌   |
+| Arsip      |  ✅   |  ❌   |
+| Pengaturan |  ✅   |  ❌   |
 
 ---
 

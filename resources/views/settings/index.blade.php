@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="pb-12" x-data="{ 
+    <div class="sm:pb-12" x-data="{ 
         activeTab: new URLSearchParams(window.location.search).get('tab') || 'categories',
         categorySearch: '',
         paymentSearch: '',

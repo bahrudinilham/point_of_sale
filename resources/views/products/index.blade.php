@@ -199,10 +199,10 @@
     </div>
 
     <!-- Product Table -->
-    <div class="pb-12">
+    <div class="pb-20 sm:pb-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-card overflow-hidden shadow-xl sm:rounded-xl border border-border">
-                <div class="p-4 sm:p-6">
+            <div id="products-table" class="bg-card overflow-hidden shadow-xl sm:rounded-xl border border-border">
+                <div class="px-4 pt-4 sm:p-6">
                     
                     @if(session('success'))
                         <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 px-4 py-3 rounded-lg relative mb-4 flex items-center gap-2" role="alert">
@@ -362,8 +362,8 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-4">
-                            {{ $products->links('vendor.pagination.custom') }}
+                        <div class="mt-2 pb-3 sm:mt-4 sm:pb-0">
+                            {{ $products->fragment('products-table')->links('vendor.pagination.custom') }}
                         </div>
                     @else
                         <!-- Empty State -->

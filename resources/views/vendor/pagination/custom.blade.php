@@ -1,29 +1,63 @@
 @if ($paginator->hasPages())
     <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex items-center justify-between">
-        <div class="flex justify-between items-center flex-1 sm:hidden">
-            @if ($paginator->onFirstPage())
-                <span class="relative inline-flex items-center justify-center w-9 h-9 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-default rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                </span>
-            @else
-                <a href="{{ $paginator->previousPageUrl() }}" class="relative inline-flex items-center justify-center w-9 h-9 text-sm font-medium text-[#5D5FEF] bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-lg hover:bg-[#5D5FEF] hover:text-white transition-colors duration-200">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                </a>
-            @endif
+        <div class="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-border shadow-[0_-4px_20px_rgba(0,0,0,0.15)] p-3 flex flex-col gap-3 sm:hidden transition-all duration-300" 
+             x-data="{ showJumpInput: false, jumpPage: {{ $paginator->currentPage() }}, menuOpen: false }" 
+             x-init="window.addEventListener('mobile-menu-toggle', (e) => menuOpen = e.detail.open)"
+             :class="{ 'blur-sm opacity-50 pointer-events-none': menuOpen }">
+            <!-- Navigation Buttons Row -->
+            <div class="flex justify-center items-center gap-2">
+                {{-- Previous Page Button --}}
+                @if ($paginator->onFirstPage())
+                    <span class="relative inline-flex items-center justify-center w-11 h-11 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-default rounded-xl">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </span>
+                @else
+                    <a href="{{ $paginator->previousPageUrl() }}" class="relative inline-flex items-center justify-center w-11 h-11 text-sm font-medium text-[#5D5FEF] bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-xl hover:bg-[#5D5FEF] hover:text-white active:scale-95 transition-all duration-200" aria-label="Previous page">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </a>
+                @endif
 
-            <div class="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                Halaman <span class="text-foreground font-bold">{{ $paginator->currentPage() }}</span> dari <span class="text-foreground font-bold">{{ $paginator->lastPage() }}</span>
+                {{-- Page Indicator (Tappable for Jump) --}}
+                <button 
+                    @click="showJumpInput = !showJumpInput" 
+                    class="inline-flex items-center justify-center min-w-[100px] h-11 px-4 text-sm font-bold text-[#5D5FEF] bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/30 active:scale-95 transition-all duration-200"
+                    aria-label="Jump to page"
+                >
+                    <span class="text-foreground">{{ $paginator->currentPage() }}</span>
+                    <span class="mx-1 text-gray-400">/</span>
+                    <span class="text-muted">{{ $paginator->lastPage() }}</span>
+                </button>
+
+                {{-- Next Page Button --}}
+                @if ($paginator->hasMorePages())
+                    <a href="{{ $paginator->nextPageUrl() }}" class="relative inline-flex items-center justify-center w-11 h-11 text-sm font-medium text-[#5D5FEF] bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-xl hover:bg-[#5D5FEF] hover:text-white active:scale-95 transition-all duration-200" aria-label="Next page">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
+                @else
+                    <span class="relative inline-flex items-center justify-center w-11 h-11 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-default rounded-xl">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </span>
+                @endif
             </div>
 
-            @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" class="relative inline-flex items-center justify-center w-9 h-9 text-sm font-medium text-[#5D5FEF] bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-900/30 rounded-lg hover:bg-[#5D5FEF] hover:text-white transition-colors duration-200">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </a>
-            @else
-                <span class="relative inline-flex items-center justify-center w-9 h-9 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 cursor-default rounded-lg">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </span>
-            @endif
+            {{-- Page Jump Input (Hidden by default) --}}
+            <div x-show="showJumpInput" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="flex items-center justify-center gap-2 px-2">
+                <span class="text-sm text-muted">Ke halaman:</span>
+                <input 
+                    type="number" 
+                    x-model="jumpPage" 
+                    min="1" 
+                    max="{{ $paginator->lastPage() }}" 
+                    class="w-20 h-10 text-center text-sm font-medium bg-background border border-border rounded-lg focus:ring-2 focus:ring-[#5D5FEF] focus:border-[#5D5FEF] transition-colors"
+                    @keydown.enter="if(jumpPage >= 1 && jumpPage <= {{ $paginator->lastPage() }}) window.location.href = '{{ $paginator->url(1) }}'.replace('page=1', 'page=' + jumpPage)"
+                >
+                <button 
+                    @click="if(jumpPage >= 1 && jumpPage <= {{ $paginator->lastPage() }}) window.location.href = '{{ $paginator->url(1) }}'.replace('page=1', 'page=' + jumpPage)"
+                    class="inline-flex items-center justify-center h-10 px-4 text-sm font-medium text-white bg-[#5D5FEF] rounded-lg hover:bg-[#4b4ddb] active:scale-95 transition-all duration-200"
+                >
+                    Pergi
+                </button>
+            </div>
         </div>
 
         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">

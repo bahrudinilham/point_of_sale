@@ -22,8 +22,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
         Route::get('/reports', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/print', [App\Http\Controllers\ReportController::class, 'print'])->name('reports.print');
-        Route::resource('products', ProductController::class);
-        Route::patch('/products/{product}/toggle', [ProductController::class, 'toggleActive'])->name('products.toggle');
         Route::resource('categories', App\Http\Controllers\CategoryController::class);
         Route::resource('payment-methods', App\Http\Controllers\PaymentMethodController::class);
         Route::patch('/payment-methods/{payment_method}/toggle', [App\Http\Controllers\PaymentMethodController::class, 'toggleActive'])->name('payment-methods.toggle');
@@ -47,6 +45,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/pos', [App\Http\Controllers\PosController::class, 'index'])->name('pos.index');
         Route::post('/pos', [App\Http\Controllers\PosController::class, 'store'])->name('pos.store');
         Route::get('/pos/search-products', [App\Http\Controllers\PosController::class, 'searchProducts'])->name('pos.search-products');
+        
+        // Product management
+        Route::resource('products', ProductController::class);
+        Route::patch('/products/{product}/toggle', [ProductController::class, 'toggleActive'])->name('products.toggle');
     });
 });
 

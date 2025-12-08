@@ -156,10 +156,10 @@
     </div>
 
     <!-- Transactions Table -->
-    <div class="pb-12">
+    <div class="pb-20 sm:pb-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div id="transactions-table" class="bg-card overflow-hidden shadow-xl sm:rounded-xl border border-border">
-                <div class="p-4 sm:p-6">
+                <div class="px-4 pt-4 sm:p-6">
 
                     @if($transactions->count() > 0)
                         <!-- Desktop Table -->
@@ -289,7 +289,7 @@
                             @endforeach
                         </div>
 
-                        <div class="mt-4">
+                        <div class="mt-2 pb-3 sm:mt-4 sm:pb-0">
                             {{ $transactions->fragment('transactions-table')->links('vendor.pagination.custom') }}
                         </div>
                     @else
