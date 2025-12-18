@@ -125,7 +125,7 @@
                             <p class="text-xs text-muted">Total Minggu Ini</p>
                             <p class="text-lg sm:text-xl font-bold text-[#5D5FEF]">Rp {{ number_format($weeklyTotal / 1000, 0, ',', '.') }}.000</p>
                         </div>
-                        <span class="bg-foreground text-background text-xs font-bold px-3 py-1 rounded-full hidden sm:inline">Mingguan</span>
+                        <span class="bg-[#5D5FEF]/10 text-[#5D5FEF] dark:bg-[#5D5FEF]/20 text-xs font-bold px-3 py-1 rounded-full hidden sm:inline">Mingguan</span>
                     </div>
                 </div>
                 <div id="weeklyChart" class="w-full"></div>
