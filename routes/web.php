@@ -8,6 +8,11 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+Route::get('/seed-me', function () {
+    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    return 'Database seeded successfully!';
+});
+
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
