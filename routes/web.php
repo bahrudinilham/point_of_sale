@@ -9,8 +9,12 @@ Route::get('/', function () {
 });
 
 Route::get('/seed-me', function () {
+    // Increase limits for heavy seeding
+    set_time_limit(300); // 5 minutes
+    ini_set('memory_limit', '512M');
+    
     \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-    return 'Database seeded successfully!';
+    return 'Database seeded successfully (Full Year)!';
 });
 
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
