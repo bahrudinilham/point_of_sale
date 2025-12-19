@@ -7,79 +7,61 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print {
-            body { -webkit-print-color-adjust: exact; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .no-print { display: none; }
         }
+        @page { margin: 1cm; }
     </style>
 </head>
 <body class="bg-white text-gray-900 p-8" onload="window.print()">
     
     <!-- Header -->
-    <div class="flex justify-between items-center mb-8 border-b pb-4">
+    <div class="flex justify-between items-start mb-6 border-b-2 border-gray-900 pb-4">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Laporan Penjualan</h1>
-            <p class="text-sm text-gray-500">Periode: {{ $periodText }}</p>
+            <h1 class="text-3xl font-bold text-gray-900">Laporan Penjualan</h1>
+            <p class="text-sm text-gray-600 mt-1">Periode: <span class="font-semibold">{{ $periodText }}</span></p>
         </div>
         <div class="text-right">
-            <div class="text-sm font-bold text-gray-900">{{ config('app.name', 'Kasir App') }}</div>
-            <div class="text-xs text-gray-500">Dicetak pada: {{ now()->format('d M Y H:i') }}</div>
+            <div class="text-xl font-bold text-gray-900">MukitCell</div>
+            <div class="text-xs text-gray-500 mt-1">Dicetak: {{ now()->format('d M Y, H:i') }}</div>
         </div>
     </div>
 
-    <!-- Summary Stats -->
-    <div class="grid grid-cols-2 gap-8 mb-8">
-        <div class="bg-gray-50 p-4 rounded-lg border">
-            <div class="text-xs font-bold text-gray-500 uppercase">Total Penjualan</div>
-            <div class="text-2xl font-bold text-gray-900 mt-1">Rp {{ number_format($totalSales, 0, ',', '.') }}</div>
+    <!-- Summary Stats - Plain Design -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+        <div class="p-4 border border-gray-300 rounded-lg">
+            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Penjualan</div>
+            <div class="text-xl font-bold text-gray-900 mt-1">Rp {{ number_format($totalSales, 0, ',', '.') }}</div>
         </div>
-        <div class="bg-gray-50 p-4 rounded-lg border">
-            <div class="text-xs font-bold text-gray-500 uppercase">Total Transaksi</div>
-            <div class="text-2xl font-bold text-gray-900 mt-1">{{ $transactionCount }}</div>
+        <div class="p-4 border border-gray-300 rounded-lg">
+            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Total Transaksi</div>
+            <div class="text-xl font-bold text-gray-900 mt-1">{{ $transactionCount }}</div>
         </div>
-    </div>
-
-    <!-- Top Products -->
-    <div class="mb-8">
-        <h3 class="text-lg font-bold text-gray-900 mb-4">Top 7 Produk Terlaris</h3>
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="border-b border-gray-200">
-                    <th class="py-2 text-xs font-bold text-gray-500 uppercase">No</th>
-                    <th class="py-2 text-xs font-bold text-gray-500 uppercase">Produk</th>
-                    <th class="py-2 text-xs font-bold text-gray-500 uppercase text-right">Terjual</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($topProducts as $index => $item)
-                <tr class="border-b border-gray-100">
-                    <td class="py-2 text-sm text-gray-900">{{ $index + 1 }}</td>
-                    <td class="py-2 text-sm text-gray-900">{{ $item->product->name }}</td>
-                    <td class="py-2 text-sm text-gray-900 text-right">{{ $item->total_qty }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="p-4 border border-gray-300 rounded-lg">
+            <div class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Rata-rata/Hari</div>
+            <div class="text-xl font-bold text-gray-900 mt-1">Rp {{ count($sales) > 0 ? number_format($totalSales / count($sales), 0, ',', '.') : 0 }}</div>
+        </div>
     </div>
 
     <!-- Daily Breakdown -->
-    <div>
-        <h3 class="text-lg font-bold text-gray-900 mb-4">Rincian Harian</h3>
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="border-b border-gray-200">
-                    <th class="py-2 text-xs font-bold text-gray-500 uppercase">Tanggal</th>
-                    <th class="py-2 text-xs font-bold text-gray-500 uppercase text-right">Penjualan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($labels as $index => $label)
-                <tr class="border-b border-gray-100">
-                    <td class="py-2 text-sm text-gray-900">{{ $label }}</td>
-                    <td class="py-2 text-sm text-gray-900 text-right">Rp {{ number_format($sales[$index], 0, ',', '.') }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="mb-8">
+        <h3 class="text-lg font-bold text-gray-900 mb-4 border-b pb-2">Rincian Harian</h3>
+        
+        <div class="grid grid-cols-3 gap-x-8 gap-y-1">
+            @foreach($labels as $index => $label)
+            <div class="flex items-center justify-between py-1.5 border-b border-gray-100">
+                <span class="text-sm text-gray-700">{{ $label }}</span>
+                <span class="text-sm font-semibold text-gray-900">
+                    Rp {{ number_format($sales[$index], 0, ',', '.') }}
+                </span>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t pt-4 mt-8 text-center text-xs text-gray-400">
+        Dokumen ini digenerate otomatis oleh sistem MukitCell &bull; {{ now()->format('d M Y H:i:s') }}
     </div>
 
 </body>

@@ -1,7 +1,7 @@
 {
-    "name": "Kasir Konter HP",
-    "short_name": "KonterHP",
-    "description": "Aplikasi Kasir Konter HP Modern",
+    "name": "MukitCell",
+    "short_name": "MukitCell",
+    "description": "Aplikasi Kasir MukitCell",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
