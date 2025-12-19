@@ -5,10 +5,16 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+    <div class="py-6 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Page Header -->
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold text-foreground">Edit Produk</h1>
+                <p class="text-muted text-sm mt-1">Perbarui informasi produk "{{ $product->name }}"</p>
+            </div>
+
+            <div class="bg-card overflow-hidden shadow-sm rounded-lg border border-border">
+                <div class="p-6 text-foreground">
                     
                     <form action="{{ route('products.update', $product) }}" method="POST">
                         @csrf
@@ -44,7 +50,7 @@
 
                             <div>
                                 <x-input-label for="selling_price" :value="__('Selling Price')" />
-                                <x-text-input id="selling_price" class="block mt-1 w-full" type="number" name="selling_price" :value="old('selling_price', $product->selling_price)" required />
+                                <x-text-input id="selling_price" class="block mt-1 w-full" type="number" name="selling_price" :value="old('selling_price', intval($product->selling_price))" required />
                                 <x-input-error :messages="$errors->get('selling_price')" class="mt-2" />
                             </div>
 
@@ -65,4 +71,6 @@
             </div>
         </div>
     </div>
+
 </x-app-layout>
+
