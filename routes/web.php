@@ -27,9 +27,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('/payment-methods/{payment_method}/toggle', [App\Http\Controllers\PaymentMethodController::class, 'toggleActive'])->name('payment-methods.toggle');
         Route::resource('users', App\Http\Controllers\UserController::class);
         Route::patch('/users/{user}/toggle', [App\Http\Controllers\UserController::class, 'toggleActive'])->name('users.toggle');
-        Route::get('/transactions/{transaction}/print', [App\Http\Controllers\TransactionController::class, 'print'])->name('transactions.print');
-        Route::get('/transactions/{transaction}/download-pdf', [App\Http\Controllers\TransactionController::class, 'downloadPdf'])->name('transactions.download-pdf');
-        Route::resource('transactions', App\Http\Controllers\TransactionController::class)->only(['index', 'show']);
         
         // Archive management
         Route::get('/archive', [App\Http\Controllers\ArchiveController::class, 'index'])->name('archive.index');
@@ -49,6 +46,11 @@ Route::middleware('auth')->group(function () {
         // Product management
         Route::resource('products', ProductController::class);
         Route::patch('/products/{product}/toggle', [ProductController::class, 'toggleActive'])->name('products.toggle');
+        
+        // Transaction history (accessible by cashier and admin)
+        Route::get('/transactions/{transaction}/print', [App\Http\Controllers\TransactionController::class, 'print'])->name('transactions.print');
+        Route::get('/transactions/{transaction}/download-pdf', [App\Http\Controllers\TransactionController::class, 'downloadPdf'])->name('transactions.download-pdf');
+        Route::resource('transactions', App\Http\Controllers\TransactionController::class)->only(['index', 'show']);
     });
 });
 
