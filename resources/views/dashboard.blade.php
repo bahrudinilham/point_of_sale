@@ -121,7 +121,7 @@
                         <p class="text-muted text-xs mt-1">{{ $startDateWeekly->format('d M') }} - {{ $endDateWeekly->format('d M Y') }}</p>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="text-right">
+                        <div class="sm:text-right">
                             <p class="text-xs text-muted">Total Minggu Ini</p>
                             <p class="text-lg sm:text-xl font-bold text-[#5D5FEF]">Rp {{ number_format($weeklyTotal / 1000, 0, ',', '.') }}.000</p>
                         </div>
