@@ -264,11 +264,21 @@
                             @if(request('week')) <input type="hidden" name="week" value="{{ request('week') }}"> @endif
                             @if(request('month')) <input type="hidden" name="month" value="{{ request('month') }}"> @endif
                             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                                <input type="text" id="startDatePicker" name="start_date" value="{{ $customStartDate->format('Y-m-d') }}" readonly
-                                       class="bg-background border border-border rounded-lg text-foreground text-xs font-medium px-3 py-2 focus:outline-none focus:border-[#5D5FEF] w-full sm:w-32 cursor-pointer">
+                                <div class="relative">
+                                    <input type="text" id="startDatePicker" name="start_date" value="{{ $customStartDate->format('Y-m-d') }}" readonly
+                                           class="bg-background border border-border rounded-lg text-foreground text-xs font-medium pl-3 pr-9 py-2 focus:outline-none focus:border-[#5D5FEF] w-full sm:w-36 cursor-pointer">
+                                    <svg class="w-4 h-4 text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
                                 <span class="text-muted text-center hidden sm:block">—</span>
-                                <input type="text" id="endDatePicker" name="end_date" value="{{ $customEndDate->format('Y-m-d') }}" readonly
-                                       class="bg-background border border-border rounded-lg text-foreground text-xs font-medium px-3 py-2 focus:outline-none focus:border-[#5D5FEF] w-full sm:w-32 cursor-pointer">
+                                <div class="relative">
+                                    <input type="text" id="endDatePicker" name="end_date" value="{{ $customEndDate->format('Y-m-d') }}" readonly
+                                           class="bg-background border border-border rounded-lg text-foreground text-xs font-medium pl-3 pr-9 py-2 focus:outline-none focus:border-[#5D5FEF] w-full sm:w-36 cursor-pointer">
+                                    <svg class="w-4 h-4 text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -339,7 +349,7 @@
                             @if(request('week'))
                                 <input type="hidden" name="week" value="{{ request('week') }}">
                             @endif
-                            <select name="month" onchange="this.form.submit()" class="w-full sm:w-auto bg-background text-foreground text-xs font-medium px-3 py-2 rounded-lg border border-border focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+                            <select name="month" onchange="this.form.submit()" class="w-full sm:w-32 bg-background text-foreground text-xs font-medium px-3 py-2 rounded-lg border border-border focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
                                 @foreach($months as $index => $monthName)
                                     <option value="{{ $index }}" {{ $selectedMonth == $index ? 'selected' : '' }}>
                                         {{ $monthName }}
