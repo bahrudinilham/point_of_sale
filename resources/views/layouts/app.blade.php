@@ -15,6 +15,7 @@
         <link rel="manifest" href="{{ asset('manifest.json') }}">
         <meta name="theme-color" content="#0f172a">
         <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])

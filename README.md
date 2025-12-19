@@ -108,7 +108,7 @@ archived_transactions ──< archived_transaction_items        ─┘
 | Dashboard  |  ✅   |  ✅   |
 | POS        |  ✅   |  ✅   |
 | Produk     |  ✅   |  ✅   |
-| Transaksi  |  ✅   |  ❌   |
+| Transaksi  |  ✅   |  ✅   |
 | Laporan    |  ✅   |  ❌   |
 | Arsip      |  ✅   |  ❌   |
 | Pengaturan |  ✅   |  ❌   |
