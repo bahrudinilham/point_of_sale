@@ -51,7 +51,7 @@
                     </div>
                     <div class="mt-3">
                         <h3 class="text-muted text-xs sm:text-sm font-medium">Penjualan Hari Ini</h3>
-                        <div class="text-lg sm:text-2xl font-bold text-foreground mt-1">Rp {{ number_format($todaySales / 1000, 0, ',', '.') }}.000</div>
+                        <div class="text-lg sm:text-2xl font-bold text-foreground mt-1">Rp {{ number_format($todaySales, 0, ',', '.') }}</div>
                     </div>
                 </div>
 
@@ -123,7 +123,7 @@
                     <div class="flex items-center gap-3">
                         <div class="sm:text-right">
                             <p class="text-xs text-muted">Total Minggu Ini</p>
-                            <p class="text-lg sm:text-xl font-bold text-[#5D5FEF]">Rp {{ number_format($weeklyTotal / 1000, 0, ',', '.') }}.000</p>
+                            <p class="text-lg sm:text-xl font-bold text-[#5D5FEF]">Rp {{ number_format($weeklyTotal, 0, ',', '.') }}</p>
                         </div>
                         <span class="bg-[#5D5FEF]/10 text-[#5D5FEF] dark:bg-[#5D5FEF]/20 text-xs font-bold px-3 py-1 rounded-full hidden sm:inline">Mingguan</span>
                     </div>
