@@ -204,7 +204,7 @@
                                         <div class="space-y-4">
                                             <div>
                                                 <x-input-label for="cat_name" value="Nama Kategori" class="text-sm" />
-                                                <x-text-input id="cat_name" name="name" type="text" class="mt-1.5 block w-full" x-model="category.name" required placeholder="Contoh: Makanan, Minuman" />
+                                                <x-text-input id="cat_name" name="name" type="text" class="mt-1.5 block w-full" x-model="category.name" required placeholder="Contoh: Aksesoris, Voucher, Kartu Perdana" />
                                             </div>
 
                                             <div class="flex justify-end gap-2 pt-2">

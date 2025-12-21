@@ -188,7 +188,7 @@
 
                     @if($products->count() > 0)
                         <!-- Desktop Table -->
-                        <div class="hidden sm:block overflow-x-auto rounded-lg border border-border">
+                        <div class="hidden sm:block overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead>
                                     <tr class="text-muted text-xs uppercase tracking-wider border-b border-border bg-background/50">
@@ -203,23 +203,16 @@
                                     @foreach($products as $product)
                                         <tr class="text-sm group hover:bg-background/50 transition-colors {{ !$product->is_active ? 'opacity-50' : '' }}">
                                             <td class="px-4 lg:px-6 py-4">
-                                                <div class="flex items-center gap-3">
-                                                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br {{ $product->is_active ? 'from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30' : 'from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700' }} flex items-center justify-center shrink-0">
-                                                        <svg class="w-5 h-5 {{ $product->is_active ? 'text-indigo-500' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                                                        </svg>
-                                                    </div>
-                                                    <div class="min-w-0">
-                                                        <div class="font-medium text-foreground truncate flex items-center gap-2">
-                                                            {{ $product->name }}
-                                                            @if(!$product->is_active)
-                                                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-500">Nonaktif</span>
-                                                            @endif
-                                                        </div>
-                                                        @if($product->description)
-                                                            <div class="text-xs text-muted truncate max-w-[200px]">{{ $product->description }}</div>
+                                                <div class="min-w-0">
+                                                    <div class="font-medium text-foreground truncate flex items-center gap-2">
+                                                        {{ $product->name }}
+                                                        @if(!$product->is_active)
+                                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 dark:bg-gray-800 text-gray-500">Nonaktif</span>
                                                         @endif
                                                     </div>
+                                                    @if($product->description)
+                                                        <div class="text-xs text-muted truncate max-w-[200px]">{{ $product->description }}</div>
+                                                    @endif
                                                 </div>
                                             </td>
                                             <td class="px-4 lg:px-6 py-4">
@@ -293,16 +286,9 @@
                             @foreach($products as $product)
                             <div class="bg-background p-4 rounded-xl border border-border shadow-sm">
                                 <div class="flex justify-between items-start mb-3">
-                                    <div class="flex items-center gap-3 min-w-0">
-                                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center shrink-0">
-                                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                                            </svg>
-                                        </div>
-                                        <div class="min-w-0">
-                                            <h3 class="font-medium text-foreground truncate">{{ $product->name }}</h3>
-                                            <p class="text-xs text-muted">{{ $product->category->name ?? '-' }}</p>
-                                        </div>
+                                    <div class="min-w-0">
+                                        <h3 class="font-medium text-foreground truncate">{{ $product->name }}</h3>
+                                        <p class="text-xs text-muted">{{ $product->category->name ?? '-' }}</p>
                                     </div>
                                     @php
                                         $stockClass = $product->stock <= 10 

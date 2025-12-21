@@ -205,7 +205,7 @@
 
                     @if($transactions->count() > 0)
                         <!-- Desktop Table -->
-                        <div class="hidden sm:block overflow-x-auto rounded-lg border border-border">
+                        <div class="hidden sm:block overflow-x-auto">
                             <table class="w-full text-left">
                                 <thead>
                                     <tr class="text-muted text-xs uppercase tracking-wider border-b border-border bg-background/50">
@@ -214,7 +214,7 @@
                                         <th class="px-4 lg:px-6 py-3 font-medium">Kasir</th>
                                         <th class="px-4 lg:px-6 py-3 font-medium text-center">Items</th>
                                         <th class="px-4 lg:px-6 py-3 font-medium text-right">Total</th>
-                                        <th class="px-4 lg:px-6 py-3 font-medium">Metode</th>
+                                        <th class="px-4 lg:px-6 py-3 font-medium text-center">Metode</th>
                                         <th class="px-4 lg:px-6 py-3 font-medium text-right">Aksi</th>
                                     </tr>
                                 </thead>
@@ -244,7 +244,7 @@
                                             <td class="px-4 lg:px-6 py-4 text-right">
                                                 <span class="font-bold text-foreground">Rp {{ number_format($transaction->final_amount, 0, ',', '.') }}</span>
                                             </td>
-                                            <td class="px-4 lg:px-6 py-4">
+                                            <td class="px-4 lg:px-6 py-4 text-center">
                                                 @php
                                                     $colorClass = match($transaction->paymentMethod->color ?? 'gray') {
                                                         'green' => 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400',
