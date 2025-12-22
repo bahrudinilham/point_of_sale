@@ -395,8 +395,7 @@
                                 <div class="group">
                                     <div class="flex items-center justify-between mb-1">
                                         <div class="flex items-center gap-3 min-w-0">
-                                            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0
-                                                        {{ $index == 0 ? 'bg-amber-400 text-amber-900' : ($index == 1 ? 'bg-gray-300 text-gray-700' : ($index == 2 ? 'bg-amber-600 text-amber-100' : 'bg-muted/30 text-muted')) }}">
+                                            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 bg-muted/30 text-muted">
                                                 {{ $index + 1 }}
                                             </div>
                                             <div class="min-w-0">
@@ -410,8 +409,7 @@
                                     </div>
                                     <!-- Progress Bar -->
                                     <div class="ml-9 h-1.5 bg-muted/20 rounded-full overflow-hidden">
-                                        <div class="h-full rounded-full transition-all duration-500 
-                                                    {{ $index == 0 ? 'bg-gradient-to-r from-amber-400 to-amber-500' : ($index == 1 ? 'bg-gradient-to-r from-gray-300 to-gray-400' : ($index == 2 ? 'bg-gradient-to-r from-amber-600 to-amber-700' : 'bg-gradient-to-r from-purple-400 to-purple-500')) }}"
+                                        <div class="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-purple-400 to-purple-500"
                                              style="width: {{ ($item->total_qty / $maxQty) * 100 }}%"></div>
                                     </div>
                                 </div>
@@ -522,7 +520,7 @@
                 series: [{ name: 'Penjualan', data: @json($monthlySales) }],
                 chart: { ...commonOptions.chart, type: 'area', height: 320 },
                 xaxis: { ...commonOptions.xaxis, categories: @json($monthlyLabels) },
-                colors: ['#10B981'],
+                colors: ['#5D5FEF'],
                 fill: {
                     type: 'gradient',
                     gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] }
@@ -550,7 +548,7 @@
                 series: [{ name: 'Penjualan', data: @json($customSales) }],
                 chart: { ...commonOptions.chart, type: 'area', height: 250, width: customChartWidth },
                 xaxis: { ...commonOptions.xaxis, categories: @json($customLabels) },
-                colors: ['#F59E0B'],
+                colors: ['#5D5FEF'],
                 fill: {
                     type: 'gradient',
                     gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] }
