@@ -260,10 +260,10 @@
 </head>
 <body class="width-80mm">
     <div class="header">
-        <div class="logo">{{ config('app.name') }}</div>
+        <div class="logo">MukitCell</div>
         <div class="store-info">
-            <p>Jl. Contoh No. 123, Jakarta</p>
-            <p>Telp: 0812-3456-7890</p>
+            <p>Jl.Pemuda timur, Pertokoan No. 7 Bojonegoro</p>
+            <p>Telp: 0813-3975-5876</p>
         </div>
     </div>
 
