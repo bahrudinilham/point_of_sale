@@ -35,6 +35,22 @@ Route::middleware('auth')->group(function () {
         Route::post('/archive/purge', [App\Http\Controllers\ArchiveController::class, 'purge'])->name('archive.purge');
         Route::post('/archive/{archivedTransaction}/restore', [App\Http\Controllers\ArchiveController::class, 'restore'])->name('archive.restore');
         Route::delete('/archive/{archivedTransaction}', [App\Http\Controllers\ArchiveController::class, 'destroy'])->name('archive.destroy');
+        Route::delete('/archive/{archivedTransaction}', [App\Http\Controllers\ArchiveController::class, 'destroy'])->name('archive.destroy');
+        
+        // DANGEROUS: Force reset data route
+        Route::get('/force-reset-data', function () {
+            if (request('key') !== 'mukitcell-secret-deploy') {
+                abort(403, 'Unauthorized action.');
+            }
+            
+            // Increase memory limit for seeding
+            ini_set('memory_limit', '512M');
+            set_time_limit(300); // 5 minutes
+            
+            Illuminate\Support\Facades\Artisan::call('migrate:fresh --seed --force'); // --force needed for production
+            
+            return 'Database reset and seeded successfully! <a href="' . route('dashboard') . '">Go to Dashboard</a>';
+        });
     });
 
     // Cashier & Admin routes
