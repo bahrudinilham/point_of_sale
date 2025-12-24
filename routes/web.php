@@ -17,8 +17,17 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+
     // Admin only routes
     Route::middleware(['role:admin'])->group(function () {
+        Route::get('/system/reset-and-seed', function () {
+            \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+                '--seed' => true,
+                '--force' => true
+            ]);
+            return 'Database seeded successfully!';
+        })->name('system.reset-seed');
+
         Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings.index');
         Route::get('/reports', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/print', [App\Http\Controllers\ReportController::class, 'print'])->name('reports.print');
