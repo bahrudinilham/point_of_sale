@@ -200,7 +200,9 @@ class KonterHPSeeder extends Seeder
         $productIds = Product::pluck('selling_price', 'id')->toArray();
         $productKeys = array_keys($productIds);
         
-        $this->command->info('Generating transactions for 2025-2026...');
+        if (isset($this->command)) {
+            $this->command->info('Generating transactions for 2025-2026...');
+        }
         
         $startDate = Carbon::create(2025, 1, 1);
         $endDate = Carbon::create(2026, 1, 31);
@@ -299,7 +301,9 @@ class KonterHPSeeder extends Seeder
                     $transactionsBuffer = [];
                     $transactionItemsBuffer = [];
                     
-                    $this->command->info("Inserted batch up to ID: " . ($currentTransactionId - 1));
+                    if (isset($this->command)) {
+                        $this->command->info("Inserted batch up to ID: " . ($currentTransactionId - 1));
+                    }
                 }
             }
         }
@@ -311,6 +315,8 @@ class KonterHPSeeder extends Seeder
         }
 
         $totalTransactions = Transaction::count();
-        $this->command->info("Seeding completed! Created $totalTransactions transactions.");
+        if (isset($this->command)) {
+            $this->command->info("Seeding completed! Created $totalTransactions transactions.");
+        }
     }
 }

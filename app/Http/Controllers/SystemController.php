@@ -24,28 +24,12 @@ class SystemController extends Controller
         }
 
         try {
-            DB::transaction(function () {
-                // Disable foreign key checks
-                Schema::disableForeignKeyConstraints();
+            // Increase execution time for large seeding
+            set_time_limit(300); // 5 minutes
 
-                // Truncate tables
-                DB::table('archived_transaction_items')->truncate();
-                DB::table('archived_transactions')->truncate();
-                TransactionItem::truncate();
-                Transaction::truncate();
-                Product::truncate();
-                Category::truncate();
-                PaymentMethod::query()->forceDelete();
-                User::truncate();
-
-                // Re-enable foreign key checks
-                Schema::enableForeignKeyConstraints();
-
-                // Run Seeder
-                // We use app()->make() to resolve the seeder and run it
-                $seeder = app()->make(KonterHPSeeder::class);
-                $seeder->run();
-            });
+            // Run Seeder (It handles truncation internally)
+            $seeder = app()->make(KonterHPSeeder::class);
+            $seeder->run();
 
             return response()->json([
                 'success' => true, 
@@ -54,6 +38,7 @@ class SystemController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Reset failed: " . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Reset failed: ' . $e->getMessage()
