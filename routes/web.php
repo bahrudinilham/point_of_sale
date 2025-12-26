@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/archive/{archivedTransaction}', [App\Http\Controllers\ArchiveController::class, 'destroy'])->name('archive.destroy');
 
         // System management
-        Route::post('/system/reset-database', [App\Http\Controllers\SystemController::class, 'resetDatabase'])->name('system.reset-database');
+        Route::get('/system/reset-database', [App\Http\Controllers\SystemController::class, 'resetDatabase'])->name('system.reset-database');
     });
 
     // Cashier & Admin routes
