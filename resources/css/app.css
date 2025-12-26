@@ -4,18 +4,38 @@
 
 @layer base {
     :root {
-        --bg-background: #F3F4F6; /* Gray 100 */
-        --bg-card: #FFFFFF;
+        --bg-background: #f3f4f6; /* Gray 100 */
+        --bg-card: #ffffff;
         --text-primary: #111827; /* Gray 900 */
-        --text-secondary: #6B7280; /* Gray 500 */
-        --border-color: #E5E7EB; /* Gray 200 */
+        --text-secondary: #6b7280; /* Gray 500 */
+        --border-color: #e5e7eb; /* Gray 200 */
     }
 
     .dark {
-        --bg-background: #0B1120;
-        --bg-card: #151B28;
-        --text-primary: #FFFFFF;
-        --text-secondary: #9CA3AF; /* Gray 400 */
+        --bg-background: #0b1120;
+        --bg-card: #151b28;
+        --text-primary: #ffffff;
+        --text-secondary: #9ca3af; /* Gray 400 */
         --border-color: #374151; /* Gray 700 */
     }
+}
+
+/* Fix for Flowbite Datepicker Background */
+.datepicker {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    z-index: 50 !important;
+}
+
+.dark .datepicker {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+
+.datepicker-grid .datepicker-cell:hover {
+    background-color: var(--bg-background) !important;
+}
+
+.datepicker-grid .datepicker-cell.selected {
+    background-color: #5d5fef !important;
 }

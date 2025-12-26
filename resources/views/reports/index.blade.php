@@ -3,21 +3,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
-    <style>
-        .flatpickr-calendar {
-            font-size: 14px !important;
-            min-width: 307px !important;
-        }
-        @media (max-width: 640px) {
-            .flatpickr-calendar {
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-            }
-        }
-    </style>
+
 
     <!-- Header Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
@@ -173,7 +159,7 @@
             <!-- Charts Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Weekly Report Card -->
-                <div class="bg-card rounded-xl p-5 sm:p-6 shadow-sm border border-border relative overflow-hidden">
+                <div class="bg-card rounded-xl p-5 sm:p-6 shadow-sm border border-border relative">
                     <div class="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
                         <div>
                             <div class="flex items-center gap-2">
@@ -205,7 +191,7 @@
                                     </svg>
                                 </button>
                                 <div x-show="open" @click.away="open = false" x-transition
-                                     class="absolute right-0 sm:left-0 mt-1 w-56 bg-card rounded-lg shadow-xl border border-border z-50 py-1">
+                                     class="absolute right-0 mt-1 w-56 bg-card rounded-lg shadow-xl border border-border z-50 py-1">
                                     @foreach($weeks as $index => $week)
                                         <a href="{{ route('reports.index', array_merge(request()->except('week'), ['week' => $index])) }}"
                                            class="flex items-center gap-2 px-3 py-2 text-xs {{ $selectedWeek == $index ? 'bg-[#5D5FEF]/10 text-[#5D5FEF]' : 'text-foreground hover:bg-muted/20' }} transition-colors">
@@ -264,20 +250,24 @@
                             @if(request('week')) <input type="hidden" name="week" value="{{ request('week') }}"> @endif
                             @if(request('month')) <input type="hidden" name="month" value="{{ request('month') }}"> @endif
                             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                                <div class="relative">
-                                    <input type="text" id="startDatePicker" name="start_date" value="{{ $customStartDate->format('Y-m-d') }}" readonly
-                                           class="bg-background border border-border rounded-lg text-foreground text-xs font-medium pl-3 pr-9 py-2 focus:outline-none focus:border-[#5D5FEF] w-full sm:w-36 cursor-pointer">
-                                    <svg class="w-4 h-4 text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
+                                <div class="relative max-w-sm">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-muted" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="start_date" value="{{ $customStartDate->format('Y-m-d') }}" onchange="this.form.submit()"
+                                           class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Pilih tanggal">
                                 </div>
                                 <span class="text-muted text-center hidden sm:block">—</span>
-                                <div class="relative">
-                                    <input type="text" id="endDatePicker" name="end_date" value="{{ $customEndDate->format('Y-m-d') }}" readonly
-                                           class="bg-background border border-border rounded-lg text-foreground text-xs font-medium pl-3 pr-9 py-2 focus:outline-none focus:border-[#5D5FEF] w-full sm:w-36 cursor-pointer">
-                                    <svg class="w-4 h-4 text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
+                                <div class="relative max-w-sm">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-muted" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="end_date" value="{{ $customEndDate->format('Y-m-d') }}" onchange="this.form.submit()"
+                                           class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Pilih tanggal">
                                 </div>
                             </div>
                         </form>
@@ -568,35 +558,5 @@
     });
 </script>
 
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const fpConfig = {
-            dateFormat: 'Y-m-d',
-            disableMobile: true,
-            static: false,
-            position: 'auto left',
-            onClose: function() {
-                document.getElementById('customDateForm').submit();
-            },
-            onOpen: function(selectedDates, dateStr, instance) {
-                // Adjust calendar position if it overflows viewport
-                setTimeout(() => {
-                    const calendar = instance.calendarContainer;
-                    const rect = calendar.getBoundingClientRect();
-                    if (rect.right > window.innerWidth) {
-                        calendar.style.left = (window.innerWidth - rect.width - 10) + 'px';
-                    }
-                    if (rect.left < 0) {
-                        calendar.style.left = '10px';
-                    }
-                }, 0);
-            }
-        };
-        
-        flatpickr('#startDatePicker', fpConfig);
-        flatpickr('#endDatePicker', fpConfig);
-    });
-</script>
+
 </x-app-layout>
