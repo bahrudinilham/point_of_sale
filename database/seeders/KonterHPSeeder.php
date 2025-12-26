@@ -194,77 +194,78 @@ class KonterHPSeeder extends Seeder
 
         // Generate transactions for January 2025 - January 2026
         $allCashiers = array_merge([$admin], $cashiers);
-        $allProducts = Product::all();
+        
+        // Optimasi: Eager loading untuk menghindari query berulang
+        // Namun karena kita pakai ID manual, kita cuma butuh ID-nya saja dari produk
+        $productIds = Product::pluck('selling_price', 'id')->toArray();
+        $productKeys = array_keys($productIds);
         
         $this->command->info('Generating transactions for 2025-2026...');
         
-        $dates = [];
         $startDate = Carbon::create(2025, 1, 1);
         $endDate = Carbon::create(2026, 1, 31);
+        
+        $transactionsBuffer = [];
+        $transactionItemsBuffer = [];
+        $bufferSize = 500; // Insert setiap 500 transaksi
+        
+        // KITA HARUS MANUAL MAININ ID KARENA BATCH INSERT TIDAK MENGEMBALIKAN ID
+        // Asumsi tabel sudah di-truncate, jadi ID mulai dari 1
+        $currentTransactionId = 1;
         
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             $month = $date->month;
             
-            // More transactions on weekends, less on weekdays
-            // Also seasonal variations (more sales in holiday seasons)
+            // Pola transaksi yang sama
             $baseTransactionsPerDay = match($month) {
-                1 => 12,   // New Year
-                2 => 8,    // Normal
-                3 => 8,    // Normal
-                4 => 9,    // Ramadan start
-                5 => 15,   // Eid
-                6 => 10,   // School holiday
-                7 => 9,    // Normal
-                8 => 8,    // Normal
-                9 => 8,    // Normal
-                10 => 9,   // Normal
-                11 => 10,  // 11.11 Sale
-                12 => 14,  // Christmas & Year End
+                1 => 12, 2 => 8, 3 => 8, 4 => 9, 5 => 15, 6 => 10,
+                7 => 9, 8 => 8, 9 => 8, 10 => 9, 11 => 10, 12 => 14,
                 default => 8,
             };
 
-            // Vary transactions based on day of week
             $dayMultiplier = $date->isWeekend() ? 1.5 : 1.0;
             $transactionsToday = (int) ($baseTransactionsPerDay * $dayMultiplier * (0.7 + (rand(0, 60) / 100)));
             
             for ($t = 0; $t < $transactionsToday; $t++) {
-                // Random time between 08:00 and 21:00
                 $hour = rand(8, 20);
                 $minute = rand(0, 59);
-                $transactionDate = $date->copy()->setTime($hour, $minute, rand(0, 59));
+                $transactionDate = $date->copy()->setTime($hour, $minute, rand(0, 59))->toDateTimeString(); // String format untuk insert
                 
-                // Random cashier (60% cashiers, 40% admin)
                 $user = rand(1, 10) <= 4 ? $admin : $cashiers[array_rand($cashiers)];
-                
-                // Random payment method
                 $paymentMethod = $allPaymentMethods->random();
                 
-                // Generate items (1-5 items per transaction)
+                // Item generation
                 $itemCount = rand(1, 5);
-                $selectedProducts = $allProducts->random($itemCount);
-                
+                // Pilih produk random
+                $selectedProductKeys = [];
+                for($k=0; $k<$itemCount; $k++) {
+                    $selectedProductKeys[] = $productKeys[array_rand($productKeys)];
+                }
+
                 $totalAmount = 0;
-                $items = [];
                 
-                foreach ($selectedProducts as $product) {
+                foreach ($selectedProductKeys as $pId) {
+                    $sellingPrice = $productIds[$pId];
                     $quantity = rand(1, 3);
-                    $subtotal = $product->selling_price * $quantity;
+                    $subtotal = $sellingPrice * $quantity;
                     $totalAmount += $subtotal;
                     
-                    $items[] = [
-                        'product_id' => $product->id,
+                    $transactionItemsBuffer[] = [
+                        'transaction_id' => $currentTransactionId,
+                        'product_id' => $pId,
                         'quantity' => $quantity,
-                        'unit_price' => $product->selling_price,
+                        'unit_price' => $sellingPrice,
                         'subtotal' => $subtotal,
+                        'created_at' => $transactionDate,
+                        'updated_at' => $transactionDate,
                     ];
                 }
                 
-                // Calculate payment (cash sometimes has change)
+                // Payment calculation
                 $cashReceived = $totalAmount;
                 $changeAmount = 0;
                 
                 if ($paymentMethod->slug === 'tunai') {
-                    // Round up to nearest 5000 or 10000
                     $roundedCash = ceil($totalAmount / 10000) * 10000;
                     if ($roundedCash - $totalAmount < 5000 && $totalAmount > 50000) {
                         $roundedCash += 10000;
@@ -273,9 +274,9 @@ class KonterHPSeeder extends Seeder
                     $changeAmount = $cashReceived - $totalAmount;
                 }
                 
-                // Create transaction
-                $transaction = Transaction::create([
-                    'invoice_number' => 'INV-' . $transactionDate->format('Ymd') . '-' . strtoupper(Str::random(8)),
+                $transactionsBuffer[] = [
+                    'id' => $currentTransactionId,
+                    'invoice_number' => 'INV-' . date('Ymd', strtotime($transactionDate)) . '-' . strtoupper(Str::random(8)),
                     'user_id' => $user->id,
                     'payment_method_id' => $paymentMethod->id,
                     'total_amount' => $totalAmount,
@@ -285,19 +286,28 @@ class KonterHPSeeder extends Seeder
                     'transaction_date' => $transactionDate,
                     'created_at' => $transactionDate,
                     'updated_at' => $transactionDate,
-                ]);
+                ];
                 
-                // Create transaction items
-                foreach ($items as $item) {
-                    TransactionItem::create([
-                        'transaction_id' => $transaction->id,
-                        'product_id' => $item['product_id'],
-                        'quantity' => $item['quantity'],
-                        'unit_price' => $item['unit_price'],
-                        'subtotal' => $item['subtotal'],
-                    ]);
+                $currentTransactionId++; // Increment manual ID
+                
+                // BATCH INSERT JIKA BUFFER PENUH
+                if (count($transactionsBuffer) >= $bufferSize) {
+                    Transaction::insert($transactionsBuffer);
+                    TransactionItem::insert($transactionItemsBuffer);
+                    
+                    // Reset buffer
+                    $transactionsBuffer = [];
+                    $transactionItemsBuffer = [];
+                    
+                    $this->command->info("Inserted batch up to ID: " . ($currentTransactionId - 1));
                 }
             }
+        }
+        
+        // INSERT SISA BUFFER TERAKHIR
+        if (!empty($transactionsBuffer)) {
+            Transaction::insert($transactionsBuffer);
+            TransactionItem::insert($transactionItemsBuffer);
         }
 
         $totalTransactions = Transaction::count();

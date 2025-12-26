@@ -8,13 +8,7 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/system/reset-and-seed', function () {
-    \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
-        '--seed' => true,
-        '--force' => true
-    ]);
-    return 'Database seeded successfully!';
-})->name('system.reset-seed');
+// Route::get('/system/reset-and-seed', function () { ... });
 
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -44,7 +38,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/archive/purge', [App\Http\Controllers\ArchiveController::class, 'purge'])->name('archive.purge');
         Route::post('/archive/{archivedTransaction}/restore', [App\Http\Controllers\ArchiveController::class, 'restore'])->name('archive.restore');
         Route::delete('/archive/{archivedTransaction}', [App\Http\Controllers\ArchiveController::class, 'destroy'])->name('archive.destroy');
-        Route::delete('/archive/{archivedTransaction}', [App\Http\Controllers\ArchiveController::class, 'destroy'])->name('archive.destroy');
+
+        // System management
+        Route::post('/system/reset-database', [App\Http\Controllers\SystemController::class, 'resetDatabase'])->name('system.reset-database');
     });
 
     // Cashier & Admin routes
