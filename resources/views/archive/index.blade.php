@@ -200,7 +200,7 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                             </svg>
                         </div>
-                        <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="start_date" value="{{ request('start_date') }}"
+                        <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="start_date" value="{{ request('start_date') }}" readonly
                                class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Dari Tanggal">
                     </div>
                 </div>
@@ -213,7 +213,7 @@
                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                             </svg>
                         </div>
-                        <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="end_date" value="{{ request('end_date') }}"
+                        <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="end_date" value="{{ request('end_date') }}" readonly
                                class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Sampai Tanggal">
                     </div>
                 </div>
