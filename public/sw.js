@@ -1,8 +1,9 @@
-const CACHE_NAME = "konter-pos-v1";
-const urlsToCache = ["/", "/dashboard", "/pos", "/offline.html"];
+const CACHE_NAME = "konter-pos-v2";
+const urlsToCache = ["/offline.html", "/logo.png", "/manifest.json"];
 
-// Install SW and cache static assets
+// Install SW
 self.addEventListener("install", (event) => {
+    self.skipWaiting();
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             console.log("Opened cache");
@@ -11,23 +12,26 @@ self.addEventListener("install", (event) => {
     );
 });
 
-// Activate SW and clean old caches
+// Activate SW
 self.addEventListener("activate", (event) => {
     const cacheWhitelist = [CACHE_NAME];
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                    if (cacheWhitelist.indexOf(cacheName) === -1) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            );
-        })
+        caches
+            .keys()
+            .then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.map((cacheName) => {
+                        if (cacheWhitelist.indexOf(cacheName) === -1) {
+                            return caches.delete(cacheName);
+                        }
+                    })
+                );
+            })
+            .then(() => self.clients.claim())
     );
 });
 
-// Network First, fallback to Cache strategy
+// Fetch Strategy
 self.addEventListener("fetch", (event) => {
     event.respondWith(
         fetch(event.request)
@@ -41,21 +45,30 @@ self.addEventListener("fetch", (event) => {
                     return response;
                 }
 
-                // Clone the response to cache it
-                const responseToCache = response.clone();
-
-                caches.open(CACHE_NAME).then((cache) => {
-                    // Only cache GET requests (don't cache POST/PUT API calls)
-                    if (event.request.method === "GET") {
+                // Cache successful GET requests (Dynamic Caching)
+                if (event.request.method === "GET") {
+                    const responseToCache = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
                         cache.put(event.request, responseToCache);
-                    }
-                });
+                    });
+                }
 
                 return response;
             })
             .catch(() => {
                 // If offline, try to return from cache
-                return caches.match(event.request);
+                return caches.match(event.request).then((cachedResponse) => {
+                    if (cachedResponse) {
+                        return cachedResponse;
+                    }
+
+                    // Fallback for navigation (HTML pages)
+                    if (event.request.mode === "navigate") {
+                        return caches.match("/offline.html");
+                    }
+
+                    return null;
+                });
             })
     );
 });
