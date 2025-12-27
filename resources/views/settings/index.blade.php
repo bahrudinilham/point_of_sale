@@ -629,15 +629,21 @@
 
     <script>
         function confirmDelete(id) {
+            const isDark = document.documentElement.classList.contains('dark');
             Swal.fire({
                 title: 'Hapus Data?',
                 text: "Data yang dihapus tidak dapat dikembalikan!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#5D5FEF',
-                cancelButtonColor: '#6b7280',
+                confirmButtonColor: '#EF4444',
+                cancelButtonColor: '#6B7280',
                 confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                background: isDark ? '#1f2937' : '#ffffff',
+                color: isDark ? '#ffffff' : '#374151',
+                customClass: {
+                    popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('delete-form-' + id).submit();

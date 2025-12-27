@@ -28,16 +28,23 @@ class DashboardController extends Controller
         
         $recentTransactions = \App\Models\Transaction::with(['user', 'paymentMethod'])->latest()->take(5)->get();
 
-        // Weekly Chart Data
+        // Weekly Chart Data - Optimized with single aggregated query
         $weeklySales = [];
         $weeklyLabels = [];
         $startDateWeekly = now()->subDays(6);
         $endDateWeekly = now();
         
+        // Single query with aggregation instead of N+1
+        $salesData = \App\Models\Transaction::selectRaw('DATE(transaction_date) as date, SUM(final_amount) as total')
+            ->whereBetween('transaction_date', [$startDateWeekly->startOfDay(), $endDateWeekly->endOfDay()])
+            ->groupBy('date')
+            ->pluck('total', 'date')
+            ->toArray();
+        
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
             $weeklyLabels[] = $date->format('d M');
-            $weeklySales[] = \App\Models\Transaction::whereDate('transaction_date', $date)->sum('final_amount');
+            $weeklySales[] = $salesData[$date->format('Y-m-d')] ?? 0;
         }
         
         $weeklyTotal = array_sum($weeklySales);

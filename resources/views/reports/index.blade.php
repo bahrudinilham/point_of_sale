@@ -196,76 +196,10 @@
                 </div>
             </div>
 
-            <!-- Charts Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Weekly Report Card -->
-                <div class="bg-card rounded-xl p-5 sm:p-6 shadow-sm border border-border relative">
-                    <div class="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <div class="p-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
-                                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                </div>
-                                <h3 class="text-foreground text-sm font-semibold">Penjualan Mingguan</h3>
-                            </div>
-                            <div class="text-2xl sm:text-3xl font-bold text-foreground mt-2">Rp {{ number_format($totalWeeklySales, 0, ',', '.') }}</div>
-                            <div class="flex items-center gap-3 mt-1">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                    </svg>
-                                    {{ $weeklyTransactionCount }} transaksi
-                                </span>
-                                <span class="text-muted text-xs">{{ $startDateWeekly->format('d M') }} - {{ $endDateWeekly->format('d M Y') }}</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 w-full sm:w-auto">
-                            <div x-data="{ open: false }" class="relative flex-1 sm:flex-none">
-                                <button @click="open = !open" type="button" 
-                                        class="w-full sm:w-auto flex items-center justify-between gap-2 bg-background text-foreground text-xs font-medium px-3 py-2 rounded-lg border border-border hover:border-[#5D5FEF] transition-colors">
-                                    <span>{{ $weeks[$selectedWeek]['label'] }}</span>
-                                    <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </button>
-                                <div x-show="open" @click.away="open = false" x-transition
-                                     class="absolute right-0 mt-1 w-56 bg-card rounded-lg shadow-xl border border-border z-50 py-1">
-                                    @foreach($weeks as $index => $week)
-                                        <a href="{{ route('reports.index', array_merge(request()->except('week'), ['week' => $index])) }}"
-                                           class="flex items-center gap-2 px-3 py-2 text-xs {{ $selectedWeek == $index ? 'bg-[#5D5FEF]/10 text-[#5D5FEF]' : 'text-foreground hover:bg-muted/20' }} transition-colors">
-                                            @if($selectedWeek == $index)
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                            @else
-                                                <span class="w-3"></span>
-                                            @endif
-                                            {{ $week['label'] }}
-                                        </a>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    @if($weeklyTransactionCount > 0)
-                        <div id="weeklyChart" class="mt-2"></div>
-                    @else
-                        <div class="flex flex-col items-center justify-center py-12 text-center">
-                            <div class="p-4 rounded-full bg-indigo-100 dark:bg-indigo-900/30 mb-4">
-                                <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                </svg>
-                            </div>
-                            <p class="text-sm text-muted">Belum ada data penjualan minggu ini</p>
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Custom Date Range Report Card -->
-                <div class="bg-card rounded-xl p-5 sm:p-6 shadow-sm border border-border relative overflow-hidden">
+            <!-- Custom Date Range & Top Products Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Custom Date Range Report Card (Span 2 cols) -->
+                <div class="lg:col-span-2 bg-card rounded-xl p-5 sm:p-6 shadow-sm border border-border relative overflow-hidden">
                     <div class="flex flex-col sm:flex-row sm:justify-between items-start mb-4 gap-3">
                         <div>
                             <div class="flex items-center gap-2">
@@ -348,62 +282,6 @@
                         </div>
                     @endif
                 </div>
-            </div>
-
-            <!-- Monthly Report & Top Products Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Monthly Report Card (Span 2 cols) -->
-                <div class="lg:col-span-2 bg-card rounded-xl p-5 sm:p-6 shadow-sm border border-border relative overflow-hidden">
-                    <div class="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <div class="p-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30">
-                                    <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                    </svg>
-                                </div>
-                                <h3 class="text-foreground text-sm font-semibold">Penjualan Bulanan</h3>
-                            </div>
-                            <div class="text-2xl sm:text-3xl font-bold text-foreground mt-2">Rp {{ number_format($totalMonthlySales, 0, ',', '.') }}</div>
-                            <div class="flex items-center gap-3 mt-1">
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                    </svg>
-                                    {{ $monthlyTransactionCount }} transaksi
-                                </span>
-                                <span class="text-muted text-xs">{{ $startDateMonthly->format('d M') }} - {{ $endDateMonthly->format('d M Y') }}</span>
-                            </div>
-                        </div>
-                        <form action="{{ route('reports.index') }}" method="GET" class="w-full sm:w-auto">
-                            @if(request('week'))
-                                <input type="hidden" name="week" value="{{ request('week') }}">
-                            @endif
-                            <select name="month" onchange="this.form.submit()" class="w-full sm:w-32 bg-background text-foreground text-xs font-medium px-3 py-2 rounded-lg border border-border focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
-                                @foreach($months as $index => $monthName)
-                                    <option value="{{ $index }}" {{ $selectedMonth == $index ? 'selected' : '' }}>
-                                        {{ $monthName }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </form>
-                    </div>
-
-                    @if($monthlyTransactionCount > 0)
-                        <div id="monthlyChartContainer" class="overflow-x-auto pb-2 no-scrollbar cursor-grab active:cursor-grabbing">
-                            <div id="monthlyChart" class="min-w-[2500px]"></div>
-                        </div>
-                    @else
-                        <div class="flex flex-col items-center justify-center py-12 text-center">
-                            <div class="p-4 rounded-full bg-emerald-100 dark:bg-emerald-900/30 mb-4">
-                                <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                                </svg>
-                            </div>
-                            <p class="text-sm text-muted">Belum ada data penjualan bulan ini</p>
-                        </div>
-                    @endif
-                </div>
 
                 <!-- Top Products Card -->
                 <div class="bg-card rounded-xl p-5 sm:p-6 shadow-sm border border-border">
@@ -466,8 +344,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Check if there's data
-        const hasWeeklyData = {{ $weeklyTransactionCount > 0 ? 'true' : 'false' }};
-        const hasMonthlyData = {{ $monthlyTransactionCount > 0 ? 'true' : 'false' }};
         const hasCustomData = {{ $customTransactionCount > 0 ? 'true' : 'false' }};
 
 
@@ -504,7 +380,7 @@
                 }
             },
             tooltip: {
-                theme: 'dark', // Force dark theme base for better default contrast if custom fails
+                theme: 'dark',
                 custom: function({series, seriesIndex, dataPointIndex, w}) {
                     const value = series[seriesIndex][dataPointIndex];
                     const date = w.globals.categoryLabels[dataPointIndex];
@@ -523,76 +399,36 @@
             }
         };
 
-        let weeklyChart, monthlyChart, customChart;
+        let customChart;
 
         // Theme observer
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.attributeName === 'class') {
                     const isDark = document.documentElement.classList.contains('dark');
-                    [weeklyChart, monthlyChart, customChart].forEach(chart => {
-                        if (chart) {
-                            chart.updateOptions({ 
-                                theme: { mode: isDark ? 'dark' : 'light' },
-                                tooltip: { theme: isDark ? 'dark' : 'light' }
-                            });
-                        }
-                    });
+                    if (customChart) {
+                        customChart.updateOptions({ 
+                            theme: { mode: isDark ? 'dark' : 'light' },
+                            tooltip: { theme: isDark ? 'dark' : 'light' }
+                        });
+                    }
                 }
             });
         });
         observer.observe(document.documentElement, { attributes: true });
 
-        // Weekly Chart
-        if (hasWeeklyData) {
-            weeklyChart = new ApexCharts(document.querySelector("#weeklyChart"), {
-                ...commonOptions,
-                series: [{ name: 'Penjualan', data: @json($weeklySales) }],
-                chart: { ...commonOptions.chart, type: 'area', height: 280 },
-                xaxis: { ...commonOptions.xaxis, categories: @json($weeklyLabels) },
-                colors: ['#5D5FEF'],
-                fill: {
-                    type: 'gradient',
-                    gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] }
-                }
-            });
-            weeklyChart.render();
-        }
-
-        // Monthly Chart
-        if (hasMonthlyData) {
-            monthlyChart = new ApexCharts(document.querySelector("#monthlyChart"), {
-                ...commonOptions,
-                series: [{ name: 'Penjualan', data: @json($monthlySales) }],
-                chart: { ...commonOptions.chart, type: 'area', height: 320 },
-                xaxis: { ...commonOptions.xaxis, categories: @json($monthlyLabels) },
-                colors: ['#5D5FEF'],
-                fill: {
-                    type: 'gradient',
-                    gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] }
-                }
-            });
-            monthlyChart.render();
-
-            // Drag to scroll for monthly chart
-            const slider = document.querySelector('#monthlyChartContainer');
-            let isDown = false, startX, scrollLeft;
-            slider.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-            slider.addEventListener('mouseleave', () => { isDown = false; });
-            slider.addEventListener('mouseup', () => { isDown = false; });
-            slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); slider.scrollLeft = scrollLeft - (e.pageX - slider.offsetLeft - startX) * 2; });
-            slider.addEventListener('wheel', (e) => { if (e.deltaY !== 0) { e.preventDefault(); slider.scrollLeft += e.deltaY; } });
-        }
-
         // Custom Chart
         if (hasCustomData) {
             const customDataLength = @json(count($customLabels));
-            const customChartWidth = Math.max(600, customDataLength * 60);
+            // For short date ranges (less than 15 days), fill the container width
+            // For longer ranges, use calculated width for horizontal scrolling
+            const useFullWidth = customDataLength <= 15;
+            const customChartWidth = useFullWidth ? '100%' : Math.max(800, customDataLength * 60);
 
             customChart = new ApexCharts(document.querySelector("#customChart"), {
                 ...commonOptions,
                 series: [{ name: 'Penjualan', data: @json($customSales) }],
-                chart: { ...commonOptions.chart, type: 'area', height: 250, width: customChartWidth },
+                chart: { ...commonOptions.chart, type: 'area', height: 300, width: customChartWidth },
                 xaxis: { ...commonOptions.xaxis, categories: @json($customLabels) },
                 colors: ['#5D5FEF'],
                 fill: {

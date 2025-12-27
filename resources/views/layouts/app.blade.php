@@ -40,13 +40,25 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
+                const getSwalOptions = () => {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    return {
+                        background: isDark ? '#1f2937' : '#ffffff',
+                        color: isDark ? '#ffffff' : '#374151',
+                        customClass: {
+                            popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                        }
+                    };
+                };
+
                 @if(session('success'))
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
                         text: "{{ session('success') }}",
                         timer: 3000,
-                        showConfirmButton: false
+                        showConfirmButton: false,
+                        ...getSwalOptions()
                     });
                 @endif
 
@@ -55,6 +67,7 @@
                         icon: 'error',
                         title: 'Error',
                         text: "{{ session('error') }}",
+                        ...getSwalOptions()
                     });
                 @endif
             });

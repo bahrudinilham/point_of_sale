@@ -62,17 +62,24 @@ class ReportController extends Controller
         $startDateMonthly = now()->month($selectedMonth)->startOfMonth();
         $endDateMonthly = now()->month($selectedMonth)->endOfMonth();
 
-        // Query Daily Data for the Selected Month
+        // Query Daily Data for the Selected Month - Optimized with single aggregated query
         $monthlySales = [];
         $monthlyLabels = [];
         $monthlyTransactionCount = 0;
 
+        // Single query with aggregation instead of N+1
+        $monthlySalesData = \App\Models\Transaction::selectRaw('DATE(transaction_date) as date, SUM(final_amount) as total, COUNT(*) as count')
+            ->whereBetween('transaction_date', [$startDateMonthly, $endDateMonthly])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
+
         $periodMonthly = \Carbon\CarbonPeriod::create($startDateMonthly, $endDateMonthly);
         foreach ($periodMonthly as $date) {
+            $dateKey = $date->format('Y-m-d');
             $monthlyLabels[] = $date->format('d M');
-            $dayTransactions = \App\Models\Transaction::whereDate('transaction_date', $date)->get();
-            $monthlySales[] = $dayTransactions->sum('final_amount');
-            $monthlyTransactionCount += $dayTransactions->count();
+            $monthlySales[] = $monthlySalesData[$dateKey]->total ?? 0;
+            $monthlyTransactionCount += $monthlySalesData[$dateKey]->count ?? 0;
         }
         $totalMonthlySales = array_sum($monthlySales);
 
@@ -113,17 +120,24 @@ class ReportController extends Controller
             $startDateWeekly = $weeks[$selectedWeek]['start'];
             $endDateWeekly = $weeks[$selectedWeek]['end'];
 
-            // Query Daily Data for the Selected Week
+            // Query Daily Data for the Selected Week - Optimized with single aggregated query
             $weeklySales = [];
             $weeklyLabels = [];
             $weeklyTransactionCount = 0;
             
+            // Single query with aggregation instead of N+1
+            $weeklySalesData = \App\Models\Transaction::selectRaw('DATE(transaction_date) as date, SUM(final_amount) as total, COUNT(*) as count')
+                ->whereBetween('transaction_date', [$startDateWeekly, $endDateWeekly])
+                ->groupBy('date')
+                ->get()
+                ->keyBy('date');
+            
             $period = \Carbon\CarbonPeriod::create($startDateWeekly, $endDateWeekly);
             foreach ($period as $date) {
+                $dateKey = $date->format('Y-m-d');
                 $weeklyLabels[] = $date->format('d M');
-                $dayTransactions = \App\Models\Transaction::whereDate('transaction_date', $date)->get();
-                $weeklySales[] = $dayTransactions->sum('final_amount');
-                $weeklyTransactionCount += $dayTransactions->count();
+                $weeklySales[] = $weeklySalesData[$dateKey]->total ?? 0;
+                $weeklyTransactionCount += $weeklySalesData[$dateKey]->count ?? 0;
             }
             $totalWeeklySales = array_sum($weeklySales);
         }
@@ -144,12 +158,19 @@ class ReportController extends Controller
         $customLabels = [];
         $customTransactionCount = 0;
 
+        // Single query with aggregation instead of N+1
+        $customSalesData = \App\Models\Transaction::selectRaw('DATE(transaction_date) as date, SUM(final_amount) as total, COUNT(*) as count')
+            ->whereBetween('transaction_date', [$customStartDate, $customEndDate])
+            ->groupBy('date')
+            ->get()
+            ->keyBy('date');
+
         $periodCustom = \Carbon\CarbonPeriod::create($customStartDate, $customEndDate);
         foreach ($periodCustom as $date) {
+            $dateKey = $date->format('Y-m-d');
             $customLabels[] = $date->format('d M');
-            $dayTransactions = \App\Models\Transaction::whereDate('transaction_date', $date)->get();
-            $customSales[] = $dayTransactions->sum('final_amount');
-            $customTransactionCount += $dayTransactions->count();
+            $customSales[] = $customSalesData[$dateKey]->total ?? 0;
+            $customTransactionCount += $customSalesData[$dateKey]->count ?? 0;
         }
         $customTotalSales = array_sum($customSales);
 

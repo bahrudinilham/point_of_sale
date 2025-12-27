@@ -65,7 +65,7 @@
                             </svg>
                         </div>
                         <input type="text" name="search" placeholder="Cari nomor invoice..." value="{{ request('search') }}" 
-                               class="w-full bg-background border-border text-foreground rounded-lg text-sm py-2.5 pl-10 pr-4 focus:border-[#5D5FEF] focus:ring-[#5D5FEF]">
+                               class="w-full bg-background border-border text-foreground rounded-lg text-sm py-2.5 pl-10 pr-4 focus:border-[#5D5FEF] focus:ring-[#5D5FEF] placeholder:text-gray-400/40 dark:placeholder:text-gray-600/60">
                     </div>
                     
                     <!-- Quick Date Presets -->

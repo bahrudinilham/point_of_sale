@@ -99,6 +99,10 @@ class PosController extends Controller
                     // Handle Physical Product
                     $product = \App\Models\Product::lockForUpdate()->find($item['id']);
                     
+                    if (!$product) {
+                        throw new \Exception("Product with ID {$item['id']} not found");
+                    }
+                    
                     if ($product->stock < $item['quantity']) {
                         throw new \Exception("Insufficient stock for product: {$product->name}");
                     }

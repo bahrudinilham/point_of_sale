@@ -47,7 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['role:admin,cashier'])->group(function () {
         Route::get('/pos', [App\Http\Controllers\PosController::class, 'index'])->name('pos.index');
         Route::post('/pos', [App\Http\Controllers\PosController::class, 'store'])->name('pos.store');
-        Route::get('/pos/search-products', [App\Http\Controllers\PosController::class, 'searchProducts'])->name('pos.search-products');
+        Route::get('/pos/search-products', [App\Http\Controllers\PosController::class, 'searchProducts'])
+            ->middleware('throttle:60,1')
+            ->name('pos.search-products');
         
         // Product management
         Route::resource('products', ProductController::class);

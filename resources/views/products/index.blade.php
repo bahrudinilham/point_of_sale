@@ -58,7 +58,7 @@
                                 </svg>
                             </div>
                             <input type="text" name="search" placeholder="Cari produk berdasarkan nama..." value="{{ request('search') }}" 
-                                   class="w-full bg-background border border-border text-foreground rounded-lg text-sm py-3 pl-12 pr-4 focus:ring-2 focus:ring-[#5D5FEF]/20 focus:border-[#5D5FEF] transition-all placeholder:text-muted">
+                                   class="w-full bg-background border border-border text-foreground rounded-lg text-sm py-3 pl-12 pr-4 focus:ring-2 focus:ring-[#5D5FEF]/20 focus:border-[#5D5FEF] transition-all placeholder:text-gray-400/40 dark:placeholder:text-gray-600/60">
                         </div>
                         <button type="submit" class="bg-[#5D5FEF] hover:bg-[#4b4ddb] text-white font-medium py-3 px-4 rounded-lg transition-colors shadow-lg shadow-indigo-500/25 shrink-0">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -368,15 +368,21 @@
 
     <script>
         function confirmDelete(formId) {
+            const isDark = document.documentElement.classList.contains('dark');
             Swal.fire({
                 title: 'Hapus Produk?',
                 text: "Data produk yang dihapus tidak dapat dikembalikan!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#5D5FEF',
-                cancelButtonColor: '#6b7280',
+                confirmButtonColor: '#EF4444',
+                cancelButtonColor: '#6B7280',
                 confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                background: isDark ? '#1f2937' : '#ffffff',
+                color: isDark ? '#ffffff' : '#374151',
+                customClass: {
+                    popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById(formId).submit();

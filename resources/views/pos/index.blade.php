@@ -598,6 +598,7 @@
                             this.cart = [];
                             this.refreshProducts();
                             
+                            const isDark = document.documentElement.classList.contains('dark');
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Transaksi Berhasil!',
@@ -607,7 +608,12 @@
                                 cancelButtonText: 'Transaksi Baru',
                                 confirmButtonColor: '#5D5FEF',
                                 cancelButtonColor: '#6B7280',
-                                reverseButtons: true
+                                reverseButtons: true,
+                                background: isDark ? '#1f2937' : '#ffffff',
+                                color: isDark ? '#ffffff' : '#374151',
+                                customClass: {
+                                    popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                                }
                             }).then((result) => {
                                 if (data.low_stock_items && data.low_stock_items.length > 0) {
                                     let message = 'Produk berikut hampir habis:<br><ul class="text-left mt-2 text-sm">';
@@ -620,7 +626,12 @@
                                         icon: 'warning',
                                         title: 'Peringatan Stok Rendah',
                                         html: message,
-                                        confirmButtonColor: '#F59E0B'
+                                        confirmButtonColor: '#F59E0B',
+                                        background: isDark ? '#1f2937' : '#ffffff',
+                                        color: isDark ? '#ffffff' : '#374151',
+                                        customClass: {
+                                            popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                                        }
                                     }).then(() => {
                                         if (result.isConfirmed) {
                                             window.open(data.redirect_url, '_blank');
@@ -633,10 +644,16 @@
                                 }
                             });
                         } else {
+                            const isDark = document.documentElement.classList.contains('dark');
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
                                 text: data.message,
+                                background: isDark ? '#1f2937' : '#ffffff',
+                                color: isDark ? '#ffffff' : '#374151',
+                                customClass: {
+                                    popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                                }
                             });
                         }
                     })

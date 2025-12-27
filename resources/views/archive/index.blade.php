@@ -420,6 +420,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
+        // Helper to check dark mode dynamically
+        const isDarkMode = () => document.documentElement.classList.contains('dark');
+
         // SweetAlert2 Toast Configuration
         const Toast = Swal.mixin({
             toast: true,
@@ -430,10 +433,21 @@
             didOpen: (toast) => {
                 toast.onmouseenter = Swal.stopTimer;
                 toast.onmouseleave = Swal.resumeTimer;
+                
+                // Apply theme dynamically on open
+                if (isDarkMode()) {
+                    toast.style.backgroundColor = '#1f2937'; // gray-800
+                    toast.style.color = '#ffffff';
+                    toast.style.border = '1px solid #374151'; // gray-700
+                } else {
+                    toast.style.backgroundColor = '#ffffff';
+                    toast.style.color = '#374151'; // gray-700
+                    toast.style.border = '1px solid #e5e7eb'; // gray-200
+                }
             }
         });
 
-        // Show session alerts
+        // Show session alerts (Icon colors preserved for context)
         @if(session('success'))
             Toast.fire({
                 icon: 'success',
@@ -455,20 +469,39 @@
             });
         @endif
 
+        // Common SweetAlert Styling Function
+        const getSwalConfig = (title, text, icon, confirmText, confirmColor, cancelColor = '#6b7280') => {
+            const isDark = isDarkMode();
+            return {
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonColor: confirmColor,
+                cancelButtonColor: cancelColor,
+                confirmButtonText: confirmText,
+                cancelButtonText: 'Batal',
+                background: isDark ? '#1f2937' : '#ffffff',
+                color: isDark ? '#ffffff' : '#374151',
+                customClass: {
+                    popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl',
+                    title: 'text-lg font-bold',
+                    htmlContainer: 'text-sm'
+                }
+            };
+        };
+
         // Archive confirmation
         document.querySelectorAll('form[data-confirm-archive]').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                Swal.fire({
-                    title: 'Arsipkan Transaksi?',
-                    text: 'Transaksi lama akan dipindahkan ke arsip',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#5D5FEF',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: 'Ya, Arsipkan!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
+                Swal.fire(getSwalConfig(
+                    'Arsipkan Transaksi?',
+                    'Transaksi lama akan dipindahkan ke arsip',
+                    'question',
+                    'Ya, Arsipkan!',
+                    '#5D5FEF'
+                )).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
                     }
@@ -480,16 +513,22 @@
         document.querySelectorAll('form[data-confirm-purge]').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                const isDark = isDarkMode();
                 Swal.fire({
                     title: 'Hapus Permanen?',
-                    html: '<p class="text-red-500 font-bold">⚠️ PERINGATAN!</p><p>Data yang dihapus <strong>TIDAK DAPAT</strong> dikembalikan!</p>',
+                    html: '<p class="text-red-500 font-bold mb-2">⚠️ PERINGATAN!</p><p>Data yang dihapus <strong>TIDAK DAPAT</strong> dikembalikan!</p>',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#dc2626',
                     cancelButtonColor: '#6b7280',
                     confirmButtonText: 'Ya, Hapus Permanen!',
                     cancelButtonText: 'Batal',
-                    reverseButtons: true
+                    reverseButtons: true,
+                    background: isDark ? '#1f2937' : '#ffffff',
+                    color: isDark ? '#ffffff' : '#374151',
+                    customClass: {
+                        popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
@@ -502,16 +541,13 @@
         document.querySelectorAll('form[data-confirm-restore]').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                Swal.fire({
-                    title: 'Pulihkan Transaksi?',
-                    text: 'Transaksi akan dikembalikan ke data aktif',
-                    icon: 'question',
-                    showCancelButton: true,
-                    confirmButtonColor: '#10b981',
-                    cancelButtonColor: '#6b7280',
-                    confirmButtonText: 'Ya, Pulihkan!',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
+                Swal.fire(getSwalConfig(
+                    'Pulihkan Transaksi?',
+                    'Transaksi akan dikembalikan ke data aktif',
+                    'question',
+                    'Ya, Pulihkan!',
+                    '#10b981'
+                )).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
                     }
@@ -523,6 +559,7 @@
         document.querySelectorAll('form[data-confirm-delete]').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+                const isDark = isDarkMode();
                 Swal.fire({
                     title: 'Hapus Arsip Ini?',
                     text: 'Data tidak dapat dikembalikan setelah dihapus!',
@@ -532,7 +569,12 @@
                     cancelButtonColor: '#6b7280',
                     confirmButtonText: 'Ya, Hapus!',
                     cancelButtonText: 'Batal',
-                    reverseButtons: true
+                    reverseButtons: true,
+                    background: isDark ? '#1f2937' : '#ffffff',
+                    color: isDark ? '#ffffff' : '#374151',
+                    customClass: {
+                        popup: 'rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl'
+                    }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit();
