@@ -1,5 +1,5 @@
-const CACHE_NAME = "konter-pos-v4";
-const urlsToCache = ["/offline.html", "/logo.png", "/manifest.json"];
+const CACHE_NAME = "konter-pos-v5";
+const urlsToCache = ["/offline.html", "/build/logo.png", "/manifest.json"];
 
 // Install SW
 self.addEventListener("install", (event) => {
