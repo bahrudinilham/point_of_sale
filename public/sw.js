@@ -1,4 +1,4 @@
-const CACHE_NAME = "konter-pos-v3";
+const CACHE_NAME = "konter-pos-v4";
 const urlsToCache = ["/offline.html", "/logo.png", "/manifest.json"];
 
 // Install SW
