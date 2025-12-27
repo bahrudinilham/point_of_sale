@@ -2,6 +2,46 @@
     <style>
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* ApexCharts Tooltip Customization */
+        .apexcharts-tooltip {
+            background-color: var(--bg-card) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+        }
+        .apexcharts-tooltip-title {
+            background-color: var(--bg-background) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            font-family: inherit !important;
+            color: var(--text-primary) !important;
+        }
+        .apexcharts-text {
+            fill: var(--text-secondary) !important;
+        }
+        /* Ensure all text inside tooltip is visible */
+        .apexcharts-tooltip-text, 
+        .apexcharts-tooltip-y-group, 
+        .apexcharts-tooltip-series-group,
+        .apexcharts-tooltip-text-y-label, 
+        .apexcharts-tooltip-text-y-value {
+            color: var(--text-primary) !important;
+        }
+        /* Force span colors */
+        .apexcharts-tooltip span {
+            color: var(--text-primary) !important;
+        }
+
+        .dark .apexcharts-tooltip {
+            background-color: var(--bg-card) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        .dark .apexcharts-tooltip-title {
+            background-color: var(--bg-background) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
     </style>
 
 
@@ -430,6 +470,7 @@
         const hasMonthlyData = {{ $monthlyTransactionCount > 0 ? 'true' : 'false' }};
         const hasCustomData = {{ $customTransactionCount > 0 ? 'true' : 'false' }};
 
+
         // Common Chart Options
         const commonOptions = {
             chart: {
@@ -449,7 +490,8 @@
             xaxis: {
                 axisBorder: { show: false },
                 axisTicks: { show: false },
-                labels: { style: { colors: 'rgba(128, 128, 128, 0.8)', fontSize: '11px' } }
+                labels: { style: { colors: 'rgba(128, 128, 128, 0.8)', fontSize: '11px' } },
+                tooltip: { enabled: false }
             },
             yaxis: {
                 labels: {
@@ -462,8 +504,22 @@
                 }
             },
             tooltip: {
-                theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-                y: { formatter: (value) => 'Rp ' + new Intl.NumberFormat('id-ID').format(value) }
+                theme: 'dark', // Force dark theme base for better default contrast if custom fails
+                custom: function({series, seriesIndex, dataPointIndex, w}) {
+                    const value = series[seriesIndex][dataPointIndex];
+                    const date = w.globals.categoryLabels[dataPointIndex];
+                    const formattedValue = new Intl.NumberFormat('id-ID').format(value);
+                    
+                    return `
+                        <div style="background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                            <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px;">${date}</div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #5D5FEF;"></div>
+                                <span style="font-weight: 600; font-size: 14px; color: var(--text-primary);">Rp ${formattedValue}</span>
+                            </div>
+                        </div>
+                    `;
+                }
             }
         };
 
