@@ -224,25 +224,31 @@
                             @if(request('week')) <input type="hidden" name="week" value="{{ request('week') }}"> @endif
                             @if(request('month')) <input type="hidden" name="month" value="{{ request('month') }}"> @endif
                             <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-                                <div class="relative max-w-sm">
+                                <div class="relative w-40">
                                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                         <svg class="w-4 h-4 text-muted" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                         </svg>
                                     </div>
-                                    <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="start_date" value="{{ $customStartDate->format('Y-m-d') }}" onchange="this.form.submit()" readonly
-                                           class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Pilih tanggal">
+                                    <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="start_date" value="{{ $customStartDate->format('Y-m-d') }}" readonly
+                                           class="w-full h-[42px] bg-background border border-border text-foreground text-sm rounded-lg ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Pilih tanggal">
                                 </div>
                                 <span class="text-muted text-center hidden sm:block">—</span>
-                                <div class="relative max-w-sm">
+                                <div class="relative w-40">
                                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                         <svg class="w-4 h-4 text-muted" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                         </svg>
                                     </div>
-                                    <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="end_date" value="{{ $customEndDate->format('Y-m-d') }}" onchange="this.form.submit()" readonly
-                                           class="w-full bg-background border border-border text-foreground text-sm rounded-lg p-2.5 ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Pilih tanggal">
+                                    <input datepicker datepicker-autohide datepicker-format="yyyy-mm-dd" type="text" name="end_date" value="{{ $customEndDate->format('Y-m-d') }}" readonly
+                                           class="w-full h-[42px] bg-background border border-border text-foreground text-sm rounded-lg ps-10 block focus:ring-1 focus:ring-[#5D5FEF] focus:border-[#5D5FEF]" placeholder="Pilih tanggal">
                                 </div>
+                                <button type="submit" class="h-[42px] w-[42px] flex items-center justify-center text-white bg-[#5D5FEF] hover:bg-[#4b4ddb] rounded-lg focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 transition-colors">
+                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </svg>
+                                    <span class="sr-only">Search</span>
+                                </button>
                             </div>
                         </form>
                     </div>

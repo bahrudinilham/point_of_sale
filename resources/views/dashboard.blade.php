@@ -4,6 +4,33 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(75, 85, 99, 0.5); }
+
+        /* ApexCharts Tooltip Customization */
+        .apexcharts-tooltip {
+            background-color: var(--bg-card) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+        }
+        .apexcharts-tooltip-title {
+            background-color: var(--bg-background) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            font-family: inherit !important;
+            color: var(--text-primary) !important;
+        }
+        .apexcharts-text {
+            fill: var(--text-secondary) !important;
+        }
+        .dark .apexcharts-tooltip {
+            background-color: var(--bg-card) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
+        .dark .apexcharts-tooltip-title {
+            background-color: var(--bg-background) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            color: var(--text-primary) !important;
+        }
     </style>
 
     <div class="min-h-screen bg-background text-foreground font-sans">
@@ -513,11 +540,22 @@
                     }
                 },
                 tooltip: {
+                    enabled: true,
                     theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light',
-                    y: {
-                        formatter: function (val) {
-                            return "Rp " + new Intl.NumberFormat('id-ID').format(val)
-                        }
+                    custom: function({series, seriesIndex, dataPointIndex, w}) {
+                        const value = series[seriesIndex][dataPointIndex];
+                        const date = w.globals.categoryLabels[dataPointIndex];
+                        const formattedValue = new Intl.NumberFormat('id-ID').format(value);
+                        
+                        return `
+                            <div style="background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px;">${date}</div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div style="width: 8px; height: 8px; border-radius: 50%; background-color: #5D5FEF;"></div>
+                                    <span style="font-weight: 600; font-size: 14px; color: var(--text-primary);">Rp ${formattedValue}</span>
+                                </div>
+                            </div>
+                        `;
                     }
                 }
             };
