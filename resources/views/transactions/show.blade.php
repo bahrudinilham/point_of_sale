@@ -4,8 +4,10 @@
             <div>
                 <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Detail Transaksi</h1>
             </div>
-            <a href="{{ route('transactions.index') }}" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out text-sm flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <a href="{{ route('transactions.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-muted/20 text-muted hover:text-foreground hover:bg-muted/30 rounded-lg transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
                 Kembali
             </a>
         </div>

@@ -192,17 +192,17 @@
 
                     <!-- Actions -->
                     <div class="flex items-end gap-2">
-                        <button type="submit" class="bg-[#5D5FEF] hover:bg-[#4b4ddb] text-white font-medium py-2.5 px-4 rounded-lg transition-colors">
+                        <button type="submit" class="h-[42px] w-[42px] flex items-center justify-center bg-[#5D5FEF] hover:bg-[#4b4ddb] text-white font-medium rounded-lg transition-colors">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </button>
                         @if(request()->hasAny(['search', 'start_date', 'end_date', 'user_id', 'payment_method']))
-                            <a href="{{ route('transactions.index') }}" class="flex items-center gap-1 text-muted hover:text-foreground text-sm px-3 py-2.5 rounded-lg hover:bg-muted/20 transition-colors">
+                            <a href="{{ route('transactions.index') }}" class="inline-flex items-center gap-2 text-red-400 hover:text-red-300 font-medium px-3 py-2.5 bg-red-900/30 hover:bg-red-900/50 rounded-lg transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                 </svg>
-                                Reset
+                                Reset Filter
                             </a>
                         @endif
                     </div>
